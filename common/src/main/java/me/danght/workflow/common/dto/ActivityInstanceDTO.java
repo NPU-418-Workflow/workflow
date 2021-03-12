@@ -12,6 +12,7 @@ public class ActivityInstanceDTO implements Serializable {
     private static final long serialVersionUID=1L;
 
     private String id;
+
     /**
      * 活动名称（当前环节业务描述）
      */
@@ -40,7 +41,7 @@ public class ActivityInstanceDTO implements Serializable {
     /**
      * xml活动编号
      */
-    private String usertaskNo;
+    private String userTaskNo;
 
     /**
      * 活动类型(会签、可回退、普通等等)
@@ -51,11 +52,12 @@ public class ActivityInstanceDTO implements Serializable {
      * 创建时间
      */
 
-    private Date createtime;
+    private Date createTime;
+
     /**
      * 最后更新时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
     private String piId;
 
@@ -67,5 +69,5 @@ public class ActivityInstanceDTO implements Serializable {
     /**
      * 当前活动未完成实例个数
      */
-    private int activeTiNum;
+    private Integer activeTiNum;
 }

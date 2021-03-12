@@ -10,11 +10,11 @@ import javax.inject.Singleton;
 
 @Singleton
 public class BpmnModelCacheDao {
-    private static final String KEY_PATTERN = "BpmnModel:%s"; // wProcessDefinition:流程定义主键
 
-    //@Resource(name = "redisTemplate")
-    //@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    //private ValueOperations<String, Object> operations;
+    /**
+     * wProcessDefinition:流程定义主键
+     */
+    private static final String KEY_PATTERN = "BpmnModel:%s";
 
     @Inject
     RedisClient redisClient;

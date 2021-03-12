@@ -9,11 +9,11 @@ import lombok.experimental.Accessors;
 import me.danght.workflow.common.bo.ActivityInstanceBO;
 import me.danght.workflow.common.constant.TaskInstanceState;
 import me.danght.workflow.common.serialization.BaseMapper;
-import me.danght.workflow.scheduler.dao.TokenMapper;
-import me.danght.workflow.scheduler.dao.WfTaskInstanceMapper;
+import me.danght.workflow.scheduler.dao.TokenRepository;
+import me.danght.workflow.scheduler.dao.TaskInstanceRepository;
 import me.danght.workflow.scheduler.dataobject.Token;
-import me.danght.workflow.scheduler.dataobject.WfTaskInstanceDO;
-import me.danght.workflow.scheduler.service.WfActivtityInstanceService;
+import me.danght.workflow.scheduler.dataobject.TaskInstanceDO;
+import me.danght.workflow.scheduler.service.ActivityInstanceService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -32,17 +32,6 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class UserTask extends Node {
-    /*private ApplicationContext applicationContext =  SpringUtil.getApplicationContext();
-
-    TokenMapper tokenMapper = applicationContext.getBean(TokenMapper.class);
-
-    WfActivtityInstanceService wfActivtityInstanceService = applicationContext.getBean(WfActivtityInstanceService.class);
-*/
-    //TokenMapper tokenMapper = SpringUtil.getBean(TokenMapper.class);
-    //WfActivtityInstanceService wfActivtityInstanceService = SpringUtil.getBean(WfActivtityInstanceService.class);
-    //RocketMQTemplate rocketMQTemplate = SpringUtil.getBean(RocketMQTemplate.class);
-
-    //private RocketMQTemplate rocketMQTemplate = applicationContext.getBean(RocketMQTemplate.class);
 
     /**
      * 活动名称
@@ -82,27 +71,24 @@ public class UserTask extends Node {
     protected List<DataParam> paramList;
 
     @Inject
-    TokenMapper tokenMapper;
+    TokenRepository tokenRepository;
 
     @Inject
-    WfTaskInstanceMapper wfTaskInstanceMapper;
+    TaskInstanceRepository taskInstanceRepository;
 
     @Inject
     RedisClient redisClient;
 
     @Inject
-    WfActivtityInstanceService wfActivtityInstanceService;
+    ActivityInstanceService activityInstanceService;
 
     @Override
     public void execute(Token token){
-        token.setUpdatetime(new Date());
-        if(token.getId() == null)
-            tokenMapper.save(token);
-        else
-            tokenMapper.save(token);
+        token.setUpdateTime(new Date());
+        tokenRepository.save(token);
         List<BaseElement> readyExecuteUserTaskList = new ArrayList<>();
         readyExecuteUserTaskList.add(this);
-        List<ActivityInstanceBO> wfActivityInstanceBOList = wfActivtityInstanceService
+        List<ActivityInstanceBO> activityInstanceBOList = activityInstanceService
                 .addActivityList(
                         readyExecuteUserTaskList,
                         token.getPiId(),
@@ -110,30 +96,32 @@ public class UserTask extends Node {
                 );
         List<String> assigners = null;
         try {
-            assigners = BaseMapper.getObjectMapper().readValue(wfActivityInstanceBOList.get(0).getAiAssignerId(), new TypeReference<>() {
+            assigners = BaseMapper.getObjectMapper().readValue(activityInstanceBOList.get(0).getAiAssignerId(), new TypeReference<>() {
             });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        if (assigners != null) pushTask(wfActivityInstanceBOList.get(0),assigners);
+        if (assigners != null) {
+            pushTask(activityInstanceBOList.get(0), assigners);
+        }
     }
 
-    public void pushTask(ActivityInstanceBO wfActivtityInstanceBO,List<String> assigners){
+    public void pushTask(ActivityInstanceBO activityInstanceBO, List<String> assigners){
         for(String assignerId : assigners){
-            WfTaskInstanceDO wfTaskInstanceDO = new WfTaskInstanceDO()
-                    .setTiName(wfActivtityInstanceBO.getAiName())
+            TaskInstanceDO taskInstanceDO = new TaskInstanceDO()
+                    .setTiName(activityInstanceBO.getAiName())
                     .setTiAssigner(assignerId)
                     .setTiStatus(TaskInstanceState.TASK_INSTANCE_STATE_RUNNING)
-                    .setBfId(wfActivtityInstanceBO.getBfId())
-                    .setAiId(wfActivtityInstanceBO.getId())
-                    .setPdId(wfActivtityInstanceBO.getPdId())
-                    .setTiAssignerType(wfActivtityInstanceBO.getAiAssignerType())
-                    .setPiId(wfActivtityInstanceBO.getPiId())
-                    .setUsertaskNo(wfActivtityInstanceBO.getUserTaskNo());
-            wfTaskInstanceDO.setCreatetime(new Date());
-            wfTaskInstanceDO.setUpdatetime(wfTaskInstanceDO.getCreatetime());
-            wfTaskInstanceMapper.save(wfTaskInstanceDO);
-            redisClient.append(wfTaskInstanceDO.getId(),"1");
+                    .setBfId(activityInstanceBO.getBfId())
+                    .setAiId(activityInstanceBO.getId())
+                    .setPdId(activityInstanceBO.getPdId())
+                    .setTiAssignerType(activityInstanceBO.getAiAssignerType())
+                    .setPiId(activityInstanceBO.getPiId())
+                    .setUserTaskNo(activityInstanceBO.getUserTaskNo());
+            taskInstanceDO.setCreateTime(new Date());
+            taskInstanceDO.setUpdateTime(taskInstanceDO.getCreateTime());
+            taskInstanceRepository.save(taskInstanceDO);
+            redisClient.append(taskInstanceDO.getId(),"1");
         }
     }
 

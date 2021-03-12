@@ -27,11 +27,11 @@ public class ProcessTemplateDTO implements Serializable {
      * 创建时间
      */
 
-    private Date createtime;
+    private Date createTime;
     /**
      * 最后更新时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
     /**
      * 流程描述文件内容

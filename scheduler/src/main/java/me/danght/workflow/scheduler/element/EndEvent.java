@@ -4,9 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import me.danght.workflow.common.api.schduler.ProcessInstanceService;
-import me.danght.workflow.scheduler.dao.TokenMapper;
+import me.danght.workflow.scheduler.dao.TokenRepository;
 import me.danght.workflow.scheduler.dataobject.Token;
-import me.danght.workflow.scheduler.service.WfActivtityInstanceService;
+import me.danght.workflow.scheduler.service.ActivityInstanceService;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -24,19 +24,12 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class EndEvent extends Event implements Serializable {
     private static final long serialVersionUID = 1L;
-    //private ApplicationContext applicationContext =  SpringUtil.getApplicationContext();
-
-    //TokenMapper tokenMapper = applicationContext.getBean(TokenMapper.class);
-
-    //WfActivtityInstanceService wfActivtityInstanceService = applicationContext.getBean(WfActivtityInstanceService.class);;
-
-    //private RocketMQTemplate rocketMQTemplate = applicationContext.getBean(RocketMQTemplate.class);
 
     @Inject
-    TokenMapper tokenMapper;
+    TokenRepository tokenRepository;
 
     @Inject
-    WfActivtityInstanceService wfActivtityInstanceService;
+    ActivityInstanceService activityInstanceService;
 
     @Inject
     ProcessInstanceService processInstanceService;
@@ -44,12 +37,8 @@ public class EndEvent extends Event implements Serializable {
     @Override
     public void execute(Token token){
         //结束流程
-        tokenMapper.deleteById(token.getId());
-        wfActivtityInstanceService.clearActivityOfProcess(token.getPiId());
+        tokenRepository.deleteById(token.getId());
+        activityInstanceService.clearActivityOfProcess(token.getPiId());
         processInstanceService.endProcess(token.getPiId());
     }
-
-/*    private void sendProcessRequestMessage(String piId) {
-        SpringUtil.getBean(RocketMQTemplate.class).convertAndSend(ProcessRequestMessage.TOPIC, new ProcessRequestMessage().setPiId(piId));
-    }*/
 }

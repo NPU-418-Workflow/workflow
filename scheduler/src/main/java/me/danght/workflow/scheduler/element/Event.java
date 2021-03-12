@@ -20,8 +20,4 @@ public abstract class Event extends Node {
      * 事件名称
      */
     protected String name;
-
-
-    /*protected List<SequenceFlow> incomingFlows = new ArrayList<SequenceFlow>();
-    protected List<SequenceFlow> outgoingFlows = new ArrayList<SequenceFlow>();*/
 }

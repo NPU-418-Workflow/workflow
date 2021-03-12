@@ -20,18 +20,18 @@ public class BaseDO implements Serializable {
     /**
      * 创建时间
      */
-    protected Date createtime;
+    protected Date createTime;
 
     /**
      * 最后更新时间
      */
-    protected Date updatetime;
+    protected Date updateTime;
 
     @Override
     public String toString() {
         return "BaseDO{" +
-                "createTime=" + createtime +
-                ", updateTime=" + updatetime +
+                "createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
     }
 
@@ -43,19 +43,19 @@ public class BaseDO implements Serializable {
         this.id = id;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

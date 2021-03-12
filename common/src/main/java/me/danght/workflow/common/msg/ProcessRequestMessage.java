@@ -14,7 +14,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class ProcessRequestMessage {
-    public static final String TOPIC = "processmanagecomponent";
 
     /**
      * 流程实例主键

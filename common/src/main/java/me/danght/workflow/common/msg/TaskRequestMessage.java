@@ -17,7 +17,6 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class TaskRequestMessage {
-    public static final String TOPIC = "taskmanagecomponent";
 
     List<ActivityInstanceBO> activityInstanceBOList;
 }

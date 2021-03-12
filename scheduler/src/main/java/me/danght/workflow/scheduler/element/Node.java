@@ -35,7 +35,6 @@ public class Node extends BaseElement implements Serializable {
     public void enter(Token token){
         token.setCurrentNode(this);
         token.setElementNo(no);
-        //execute
         execute(token);
     }
     public void execute(Token token){

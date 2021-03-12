@@ -4,9 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import me.danght.workflow.common.constant.ParamType;
-import me.danght.workflow.scheduler.bo.WfProcessParamsRecordBO;
+import me.danght.workflow.scheduler.bo.ProcessParamsRecordBO;
 import me.danght.workflow.scheduler.dataobject.Token;
-import me.danght.workflow.scheduler.service.WfProcessParamsRecordService;
+import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 import me.danght.workflow.scheduler.tools.JexlUtil;
 
 import javax.inject.Inject;
@@ -28,10 +28,6 @@ import java.util.Map;
 @Accessors(chain = true)
 public class SequenceFlow extends BaseElement implements Serializable {
 
-    //private ApplicationContext applicationContext =  SpringUtil.getApplicationContext();
-    //WfProcessParamsRecordService wfProcessParamsRecordService = applicationContext.getBean(WfProcessParamsRecordService.class);
-
-    //WfProcessParamsRecordService wfProcessParamsRecordService = SpringUtil.getBean(WfProcessParamsRecordService.class);
     private static final long serialVersionUID = 1L;
 
     /**
@@ -59,7 +55,7 @@ public class SequenceFlow extends BaseElement implements Serializable {
     protected List<DataParam> paramList;
 
     @Inject
-    WfProcessParamsRecordService wfProcessParamsRecordService;
+    ProcessParamsRecordService processParamsRecordService;
 
     public void take(Token token){
         //如sf不带有条件表达式，则无脑往目标走
@@ -67,30 +63,30 @@ public class SequenceFlow extends BaseElement implements Serializable {
             //在连接线上没有令牌住所，佩特里网transition不持有令牌
             token.setCurrentNode(null);
             ((Node)to).enter(token);
-        }else if (conditionExpression != null && conditionExpression.length() > 0){
+        } else if (conditionExpression.length() > 0){
             //TODO 这块其实用不上，因为无论是排他网关还是选择网关都会提前判定执行那些有向弧进行变迁
             Map<String,Object> requiredData = new HashMap<>();
             for(DataParam dataParam : paramList){
-                WfProcessParamsRecordBO wfProcessParamsRecordBO = wfProcessParamsRecordService
+                ProcessParamsRecordBO processParamsRecordBO = processParamsRecordService
                         .getByEnginePpName(
                                 dataParam.getEnginePpName(),
                                 token.getPiId(),
                                 token.getPdId(),
                                 dataParam.getTaskNo()
                         );
-                if (wfProcessParamsRecordBO != null) {
-                    switch (wfProcessParamsRecordBO.getPpType()){
+                if (processParamsRecordBO != null) {
+                    switch (processParamsRecordBO.getPpType()){
                         case ParamType.PARAM_TYPE_BOOL:
-                            requiredData.put(dataParam.getEnginePpName(), "1".equals(wfProcessParamsRecordBO.getPpRecordValue()));
+                            requiredData.put(dataParam.getEnginePpName(), "1".equals(processParamsRecordBO.getPpRecordValue()));
                             break;
                         case ParamType.PARAM_TYPE_INT:
-                            requiredData.put(dataParam.getEnginePpName(),Integer.parseInt(wfProcessParamsRecordBO.getPpRecordValue()));
+                            requiredData.put(dataParam.getEnginePpName(),Integer.parseInt(processParamsRecordBO.getPpRecordValue()));
                             break;
                         case ParamType.PARAM_TYPE_FLOAT:
-                            requiredData.put(dataParam.getEnginePpName(),Float.parseFloat(wfProcessParamsRecordBO.getPpRecordValue()));
+                            requiredData.put(dataParam.getEnginePpName(),Float.parseFloat(processParamsRecordBO.getPpRecordValue()));
                             break;
                         case ParamType.PARAM_TYPE_STRING:
-                            requiredData.put(dataParam.getEnginePpName(),wfProcessParamsRecordBO.getPpRecordValue());
+                            requiredData.put(dataParam.getEnginePpName(), processParamsRecordBO.getPpRecordValue());
                             break;
                         default:
                             break;

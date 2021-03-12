@@ -3,14 +3,18 @@ package me.danght.workflow.scheduler.dao.redis;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.quarkus.redis.client.RedisClient;
 import me.danght.workflow.common.serialization.BaseMapper;
-import me.danght.workflow.scheduler.dataobject.WfProcessParamsRecordDO;
+import me.danght.workflow.scheduler.dataobject.ProcessParamsRecordDO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public class WfProcessParamsRecordCacheDao {
-    private static final String KEY_PATTERN = "enginePpName:%s;aiId:%s"; // wProcessDefinition:流程定义主键
+
+    /**
+     * wProcessDefinition:流程定义主键
+     */
+    private static final String KEY_PATTERN = "enginePpName:%s;aiId:%s";
 
     @Inject
     RedisClient redisClient;
@@ -18,19 +22,19 @@ public class WfProcessParamsRecordCacheDao {
     private static String buildKey(String enginePpName,String aiId) {
         return String.format(KEY_PATTERN, enginePpName,aiId);
     }
-    public WfProcessParamsRecordDO get(String enginePpName, String aiId) {
+    public ProcessParamsRecordDO get(String enginePpName, String aiId) {
         String key = buildKey(enginePpName,aiId);
         String value = redisClient.get(key).toString();
-        WfProcessParamsRecordDO wfProcessParamsRecordDO = null;
+        ProcessParamsRecordDO processParamsRecordDO = null;
         try {
-            wfProcessParamsRecordDO = BaseMapper.getObjectMapper().readValue(value, WfProcessParamsRecordDO.class);
+            processParamsRecordDO = BaseMapper.getObjectMapper().readValue(value, ProcessParamsRecordDO.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return wfProcessParamsRecordDO;
+        return processParamsRecordDO;
     }
 
-    public void set(String enginePpName,String aiId, WfProcessParamsRecordDO object) {
+    public void set(String enginePpName,String aiId, ProcessParamsRecordDO object) {
         String key = buildKey(enginePpName,aiId);
         String value = null;
         try {

@@ -1,9 +1,9 @@
 package me.danght.workflow.scheduler.service.impl;
 
 import me.danght.workflow.common.dto.ActivityInstanceDTO;
-import me.danght.workflow.scheduler.convert.WfActivityInstanceConvert;
-import me.danght.workflow.scheduler.dao.WfActivityHistoryInstanceMapper;
-import me.danght.workflow.scheduler.dataobject.WfActivityHistoryInstanceDO;
+import me.danght.workflow.scheduler.convert.ActivityInstanceConvert;
+import me.danght.workflow.scheduler.dao.ActivityHistoryInstanceRepository;
+import me.danght.workflow.scheduler.dataobject.ActivityHistoryInstanceDO;
 import me.danght.workflow.scheduler.element.UserTask;
 import me.danght.workflow.scheduler.service.ScheduleManageService;
 import me.danght.workflow.scheduler.element.Process;
@@ -16,7 +16,7 @@ import java.util.Date;
 public class ScheduleManageServiceImpl implements ScheduleManageService {
 
     @Inject
-    WfActivityHistoryInstanceMapper wfActivityHistoryInstanceMapper;
+    ActivityHistoryInstanceRepository activityHistoryInstanceRepository;
 
     @Override
     public UserTask findUserTaskByNo(String no, Process process) {
@@ -28,11 +28,11 @@ public class ScheduleManageServiceImpl implements ScheduleManageService {
     }
 
     @Override
-    public void recordActivityHistory(ActivityInstanceDTO wfActivityInstanceDTO) {
-        WfActivityHistoryInstanceDO wfActivityHistoryInstanceDO = WfActivityInstanceConvert.INSTANCE.convertRunToHistoryDO(wfActivityInstanceDTO);
-        wfActivityHistoryInstanceDO.setCreatetime(new Date());
-        wfActivityHistoryInstanceDO.setUpdatetime(wfActivityHistoryInstanceDO.getCreatetime());
-        wfActivityHistoryInstanceMapper.save(wfActivityHistoryInstanceDO);
+    public void recordActivityHistory(ActivityInstanceDTO activityInstanceDTO) {
+        ActivityHistoryInstanceDO activityHistoryInstanceDO = ActivityInstanceConvert.INSTANCE.convertRunToHistoryDO(activityInstanceDTO);
+        activityHistoryInstanceDO.setCreateTime(new Date());
+        activityHistoryInstanceDO.setUpdateTime(activityHistoryInstanceDO.getCreateTime());
+        activityHistoryInstanceRepository.save(activityHistoryInstanceDO);
     }
 
 

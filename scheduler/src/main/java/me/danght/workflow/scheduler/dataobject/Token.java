@@ -22,7 +22,7 @@ import java.util.List;
 @Table(name = "wf_token")
 public class Token extends BaseDO {
 
-    protected Date endtime;
+    protected Date endTime;
 
     /**
      * 数据库用,当前持有令牌的节点的编号

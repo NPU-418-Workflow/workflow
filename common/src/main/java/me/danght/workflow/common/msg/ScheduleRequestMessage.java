@@ -15,7 +15,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class ScheduleRequestMessage {
-    public static final String TOPIC = "ScheduleComponent";
 
     /**
      * 流程管理器将流程实例中的调度所需的属性发给调度器，目前的设计是流程管理器

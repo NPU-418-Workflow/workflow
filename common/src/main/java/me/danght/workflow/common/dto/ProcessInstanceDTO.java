@@ -16,11 +16,11 @@ public class ProcessInstanceDTO implements Serializable{
      * 创建时间
      */
 
-    private Date createtime;
+    private Date createTime;
     /**
      * 最后更新时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
     /**
      * 流程实例名称(自动拼接用户名+模板名称)
@@ -45,12 +45,12 @@ public class ProcessInstanceDTO implements Serializable{
     /**
      * 流程结束时间
      */
-    private Date endtime;
+    private Date endTime;
 
     /**
      * 流程关联的业务数据主键
      */
-    private String piBusinesskey;
+    private String piBusinessKey;
 
 
 }

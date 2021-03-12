@@ -10,7 +10,11 @@ import javax.inject.Singleton;
 
 @Singleton
 public class TokenCacheDao {
-    private static final String KEY_PATTERN = "token:%s"; // wProcessDefinition:流程定义主键
+
+    /**
+     * wProcessDefinition:流程定义主键
+     */
+    private static final String KEY_PATTERN = "token:%s";
 
     @Inject
     RedisClient redisClient;

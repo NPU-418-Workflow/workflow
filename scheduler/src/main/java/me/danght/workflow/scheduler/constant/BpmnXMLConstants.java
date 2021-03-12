@@ -1,7 +1,10 @@
 package me.danght.workflow.scheduler.constant;
 
 public class BpmnXMLConstants {
-    //元素
+
+    /**
+     * 元素
+     */
     public static final String ELEMENT_PROCESS = "process";
     public static final String ELEMENT_TASK_USER = "userTask";
     public static final String ELEMENT_SEQUENCE_FLOW = "sequenceFlow";
@@ -10,18 +13,23 @@ public class BpmnXMLConstants {
     public static final String ELEMENT_EVENT_START = "startEvent";
     public static final String ELEMENT_EVENT_END = "endEvent";
 
-    //公共属性
+    /**
+     * 公共属性
+     */
     public static final String ATTRIBUTE_NO = "no";
     public static final String ATTRIBUTE_NAME = "name";
-    //活动属性
-    public static final String ATTRIBUTE_TASK_USER_ASSIGNEETYPE = "assigneeType";
+
+    /**
+     * 活动属性
+     */
+    public static final String ATTRIBUTE_TASK_USER_ASSIGNEE_TYPE = "assigneeType";
     public static final String ATTRIBUTE_TASK_USER_ASSIGNEE = "assignee";
     public static final String ATTRIBUTE_TASK_USER_TYPE = "taskType";
-    public static final String ATTRIBUTE_TASK_USER_PAGEKEY = "pageKey";
+    public static final String ATTRIBUTE_TASK_USER_PAGE_KEY = "pageKey";
     public static final String ATTRIBUTE_SEQUENCE_FLOW_CONDITION = "conditionExpression";
     public static final String ATTRIBUTE_SEQUENCE_FLOW_SOURCE_REF = "sourceRef";
     public static final String ATTRIBUTE_SEQUENCE_FLOW_TARGET_REF = "targetRef";
-    public static final String ATTRIBUTE_SEQUENCE_FLOW_PARAMLIST = "paramList";
+    public static final String ATTRIBUTE_SEQUENCE_FLOW_PARAM_LIST = "paramList";
 
 
     //definitions根节点属性

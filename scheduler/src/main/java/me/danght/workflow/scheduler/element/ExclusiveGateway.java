@@ -4,9 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import me.danght.workflow.common.constant.ParamType;
-import me.danght.workflow.scheduler.bo.WfProcessParamsRecordBO;
+import me.danght.workflow.scheduler.bo.ProcessParamsRecordBO;
 import me.danght.workflow.scheduler.dataobject.Token;
-import me.danght.workflow.scheduler.service.WfProcessParamsRecordService;
+import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 import me.danght.workflow.scheduler.tools.JexlUtil;
 
 import javax.inject.Inject;
@@ -27,14 +27,9 @@ import java.util.Map;
 @Accessors(chain = true)
 public class ExclusiveGateway extends Gateway implements Serializable {
     private static final long serialVersionUID = 1L;
-    //private ApplicationContext applicationContext =  SpringUtil.getApplicationContext();
-    //WfProcessParamsRecordService wfProcessParamsRecordService = applicationContext.getBean(WfProcessParamsRecordService.class);
-
-    //WfProcessParamsRecordService wfProcessParamsRecordService = SpringUtil.getBean(WfProcessParamsRecordService.class);
-    //ExclusiveGateway的业务逻辑不同于其他类型的网关
 
     @Inject
-    WfProcessParamsRecordService wfProcessParamsRecordService;
+    ProcessParamsRecordService processParamsRecordService;
 
     @Override
     public void execute(Token token){
@@ -49,26 +44,26 @@ public class ExclusiveGateway extends Gateway implements Serializable {
                 //TODO 如有条件表达式，则开始条件判断，符合条件才能通过，否则丢弃令牌，条件判断逻辑同排他网关handler部分
                 Map<String,Object> requiredData = new HashMap<>();
                 for(DataParam dataParam : sequenceFlow.getParamList()){
-                    WfProcessParamsRecordBO wfProcessParamsRecordBO = wfProcessParamsRecordService
+                    ProcessParamsRecordBO processParamsRecordBO = processParamsRecordService
                             .getByEnginePpName(
                                     dataParam.getEnginePpName(),
                                     token.getPiId(),
                                     token.getPdId(),
                                     dataParam.getTaskNo()
                             );
-                    if (wfProcessParamsRecordBO != null){
-                        switch (wfProcessParamsRecordBO.getPpType()){
+                    if (processParamsRecordBO != null){
+                        switch (processParamsRecordBO.getPpType()){
                             case ParamType.PARAM_TYPE_BOOL:
-                                requiredData.put(dataParam.getEnginePpName(), "1".equals(wfProcessParamsRecordBO.getPpRecordValue()));
+                                requiredData.put(dataParam.getEnginePpName(), "1".equals(processParamsRecordBO.getPpRecordValue()));
                                 break;
                             case ParamType.PARAM_TYPE_INT:
-                                requiredData.put(dataParam.getEnginePpName(),Integer.parseInt(wfProcessParamsRecordBO.getPpRecordValue()));
+                                requiredData.put(dataParam.getEnginePpName(),Integer.parseInt(processParamsRecordBO.getPpRecordValue()));
                                 break;
                             case ParamType.PARAM_TYPE_FLOAT:
-                                requiredData.put(dataParam.getEnginePpName(),Float.parseFloat(wfProcessParamsRecordBO.getPpRecordValue()));
+                                requiredData.put(dataParam.getEnginePpName(),Float.parseFloat(processParamsRecordBO.getPpRecordValue()));
                                 break;
                             case ParamType.PARAM_TYPE_STRING:
-                                requiredData.put(dataParam.getEnginePpName(),wfProcessParamsRecordBO.getPpRecordValue());
+                                requiredData.put(dataParam.getEnginePpName(), processParamsRecordBO.getPpRecordValue());
                                 break;
                             default:
                                 break;

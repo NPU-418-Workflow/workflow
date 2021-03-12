@@ -27,7 +27,7 @@ public class ProcessInstanceMessage {
 
     private String piStarter;
 
-    private String piBusinesskey;
+    private String piBusinessKey;
 
     /**
      * 第一个活动对应的必填项数据

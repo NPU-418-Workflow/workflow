@@ -27,6 +27,6 @@ public class ProcessInstanceStartDTO implements Serializable {
     /**
      * 流程关联的业务数据主键
      */
-    private String piBusinesskey;
+    private String piBusinessKey;
 }
 

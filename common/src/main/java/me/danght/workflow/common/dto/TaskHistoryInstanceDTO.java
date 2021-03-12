@@ -19,11 +19,11 @@ public class TaskHistoryInstanceDTO implements Serializable {
      * 创建时间
      */
 
-    private Date createtime;
+    private Date createTime;
     /**
      * 最后更新时间
      */
-    private Date updatetime;
+    private Date updateTime;
     /**
      * 运行时的任务实例主键
      */
@@ -53,17 +53,17 @@ public class TaskHistoryInstanceDTO implements Serializable {
     /**
      * 运行时任务开始时间
      */
-    private Date tiCreatetime;
+    private Date tiCreateTime;
 
     /**
      * 运行时任务状态更新时间
      */
-    private Date tiUpdatetime;
+    private Date tiUpdateTime;
 
     /**
      * 运行时任务结束时间
      */
-    private Date tiEndtime;
+    private Date tiEndTime;
 
     private String piId;
 

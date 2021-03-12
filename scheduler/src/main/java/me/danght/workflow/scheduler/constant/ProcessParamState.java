@@ -10,6 +10,6 @@ package me.danght.workflow.scheduler.constant;
  * @since 2019-10-23
  */
 public class ProcessParamState {
-    public static final String PROCESS_PARAM_EFFECT = "01";	    //01生效
-    public static final String PROCESS_PARAM_FAILURE = "02";    //02失效
+    public static final String PROCESS_PARAM_EFFECT = "01";
+    public static final String PROCESS_PARAM_FAILURE = "02";
 }

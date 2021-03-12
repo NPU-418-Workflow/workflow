@@ -15,6 +15,6 @@ public interface ScheduleManageService {
     UserTask findUserTaskByNo(String no, Process process);
     //boolean IsRelatedUserTaskCompleted()
 
-    void recordActivityHistory(ActivityInstanceDTO wfActivtityInstanceDTO);
+    void recordActivityHistory(ActivityInstanceDTO activityInstanceDTO);
 
 }

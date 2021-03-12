@@ -16,11 +16,11 @@ public class ProcessParamsRelationDTO implements Serializable {
      * 创建时间
      */
 
-    private Date createtime;
+    private Date createTime;
     /**
      * 最后更新时间
      */
-    private Date updatetime;
+    private Date updateTime;
     /**
      * 画流程人员指定的必填项名称
      */

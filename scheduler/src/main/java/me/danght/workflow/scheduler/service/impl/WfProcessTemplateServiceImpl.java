@@ -1,24 +1,23 @@
 package me.danght.workflow.scheduler.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.oilpeddler.wfengine.common.dto.WfProcessTemplateDTO;
-import com.oilpeddler.wfengine.schedulecomponent.convert.WfProcessTemplateConvert;
-import com.oilpeddler.wfengine.schedulecomponent.dao.WfProcessTemplateMapper;
-import com.oilpeddler.wfengine.schedulecomponent.dataobject.WfProcessTemplateDO;
-import com.oilpeddler.wfengine.schedulecomponent.service.WfProcessTemplateService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import me.danght.workflow.common.dto.ProcessTemplateDTO;
+import me.danght.workflow.scheduler.convert.WfProcessTemplateConvert;
+import me.danght.workflow.scheduler.dao.WfProcessTemplateMapper;
+import me.danght.workflow.scheduler.dataobject.WfProcessTemplateDO;
+import me.danght.workflow.scheduler.service.WfProcessTemplateService;
 
-@Service
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class WfProcessTemplateServiceImpl implements WfProcessTemplateService {
-    @Autowired
+
+    @Inject
     WfProcessTemplateMapper wfProcessTemplateMapper;
 
     @Override
-    public WfProcessTemplateDTO selectByPtFilename(String ptFilename) {
-        QueryWrapper<WfProcessTemplateDO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("pt_filename",ptFilename);
-        WfProcessTemplateDO wfProcessTemplateDO = wfProcessTemplateMapper.selectOne(queryWrapper);
+    public ProcessTemplateDTO selectByPtFilename(String ptFilename) {
+        WfProcessTemplateDO wfProcessTemplateDO = wfProcessTemplateMapper.findByPtFilename(ptFilename).get();
         return WfProcessTemplateConvert.INSTANCE.convertDOToDTO(wfProcessTemplateDO);
     }
 }

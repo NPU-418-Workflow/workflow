@@ -54,7 +54,7 @@ public class WfActivityInstanceDO extends BaseDO {
     /**
      * xml活动编号
      */
-    private String usertaskNo;
+    private String userTaskNo;
 
     /**
      * 活动类型(会签、可回退、普通等等)

@@ -1,22 +1,24 @@
 package me.danght.workflow.scheduler.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.oilpeddler.wfengine.common.api.scheduleservice.WfProcessInstanceService;
-import com.oilpeddler.wfengine.common.bo.WfProcessInstanceBO;
-import com.oilpeddler.wfengine.common.constant.ProcessInstanceState;
-import com.oilpeddler.wfengine.common.dto.WfProcessInstanceStartDTO;
-import com.oilpeddler.wfengine.common.message.ScheduleRequestMessage;
-import com.oilpeddler.wfengine.common.message.WfProcessInstanceMessage;
-import com.oilpeddler.wfengine.schedulecomponent.convert.WfProcessInstanceConvert;
-import com.oilpeddler.wfengine.schedulecomponent.dao.WfProcessHistoryInstanceMapper;
-import com.oilpeddler.wfengine.schedulecomponent.dao.WfProcessInstanceMapper;
-import com.oilpeddler.wfengine.schedulecomponent.dataobject.WfProcessHistoryInstanceDO;
-import com.oilpeddler.wfengine.schedulecomponent.dataobject.WfProcessInstanceDO;
-import org.apache.dubbo.config.annotation.Service;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import me.danght.workflow.common.api.schduler.ProcessInstanceService;
+import me.danght.workflow.common.bo.ProcessInstanceBO;
+import me.danght.workflow.common.constant.ProcessInstanceState;
+import me.danght.workflow.common.dto.ProcessInstanceStartDTO;
+import me.danght.workflow.common.msg.ProcessInstanceMessage;
+import me.danght.workflow.common.msg.ScheduleRequestMessage;
+import me.danght.workflow.scheduler.convert.WfProcessInstanceConvert;
+import me.danght.workflow.scheduler.dao.WfProcessHistoryInstanceMapper;
+import me.danght.workflow.scheduler.dao.WfProcessInstanceMapper;
+import me.danght.workflow.scheduler.dataobject.WfProcessHistoryInstanceDO;
+import me.danght.workflow.scheduler.dataobject.WfProcessInstanceDO;
+import org.apache.dubbo.config.annotation.DubboService;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,17 +31,19 @@ import java.util.List;
  * @author wenxiang
  * @since 2019-10-08
  */
-@Service
-@org.springframework.stereotype.Service
-public class WfProcessInstanceServiceImpl implements WfProcessInstanceService {
-    @Autowired
+@DubboService(interfaceClass = ProcessInstanceService.class)
+@Singleton
+public class WfProcessInstanceServiceImpl implements ProcessInstanceService {
+
+    @Inject
     WfProcessInstanceMapper wfProcessInstanceMapper;
 
-    @Autowired
+    @Inject
     WfProcessHistoryInstanceMapper wfProcessHistoryInstanceMapper;
 
-    @Resource
-    private RocketMQTemplate rocketMQTemplate;
+    @Inject
+    @Channel("schedule-request-out")
+    Emitter<ScheduleRequestMessage> emitter;
 
     /**
      * 向数据库wf_process_instance表中插入一条新纪录，之后通过mq向调度器请求调度任务
@@ -47,12 +51,12 @@ public class WfProcessInstanceServiceImpl implements WfProcessInstanceService {
      * @return
      */
     @Override
-    public WfProcessInstanceBO startProcess(WfProcessInstanceStartDTO wfProcessInstanceStartDTO) {
+    public ProcessInstanceBO startProcess(ProcessInstanceStartDTO wfProcessInstanceStartDTO) {
         WfProcessInstanceDO wfProcessInstanceDO = WfProcessInstanceConvert.INSTANCE.convertStartDTOToDO(wfProcessInstanceStartDTO);
         wfProcessInstanceDO.setPiStatus(ProcessInstanceState.PROCESS_INSTANCE_STATE_RUNNING);
         wfProcessInstanceDO.setCreatetime(new Date());
         wfProcessInstanceDO.setUpdatetime(wfProcessInstanceDO.getCreatetime());
-        wfProcessInstanceMapper.insert(wfProcessInstanceDO);
+        wfProcessInstanceMapper.save(wfProcessInstanceDO);
         return WfProcessInstanceConvert.INSTANCE.convertDOToBO(wfProcessInstanceDO);
     }
 
@@ -63,7 +67,7 @@ public class WfProcessInstanceServiceImpl implements WfProcessInstanceService {
     @Override
     public void endProcess(String piId) {
         //修改状态并删除运行实例表中的数据，并在历史表中进行时间戳记录
-        WfProcessInstanceDO wfProcessInstanceDO = wfProcessInstanceMapper.selectById(piId);
+        WfProcessInstanceDO wfProcessInstanceDO = wfProcessInstanceMapper.findById(piId).get();
         if(wfProcessInstanceDO.getPiStatus().equals(ProcessInstanceState.PROCESS_INSTANCE_STATE_RUNNING))
             wfProcessInstanceDO.setPiStatus(ProcessInstanceState.PROCESS_INSTANCE_STATE_COMPLETED);
         wfProcessInstanceDO.setUpdatetime(new Date());
@@ -72,40 +76,33 @@ public class WfProcessInstanceServiceImpl implements WfProcessInstanceService {
         wfProcessHistoryInstanceDO.setCreatetime(new Date());
         wfProcessHistoryInstanceDO.setUpdatetime(wfProcessHistoryInstanceDO.getCreatetime());
         wfProcessInstanceMapper.deleteById(piId);
-        wfProcessHistoryInstanceMapper.insert(wfProcessHistoryInstanceDO);
+        wfProcessHistoryInstanceMapper.save(wfProcessHistoryInstanceDO);
     }
 
     @Override
     public void changeProcessState(String piId, String state) {
-        WfProcessInstanceDO wfProcessInstanceDO = wfProcessInstanceMapper.selectById(piId);
+        WfProcessInstanceDO wfProcessInstanceDO = wfProcessInstanceMapper.findById(piId).get();
         wfProcessInstanceDO.setPiStatus(state);
-        wfProcessInstanceMapper.updateById(wfProcessInstanceDO);
+        wfProcessInstanceMapper.save(wfProcessInstanceDO);
     }
 
     @Override
-    public WfProcessInstanceBO getById(String id){
-        WfProcessInstanceDO wfProcessInstanceDO = wfProcessInstanceMapper.selectById(id);
+    public ProcessInstanceBO getById(String id){
+        WfProcessInstanceDO wfProcessInstanceDO = wfProcessInstanceMapper.findById(id).get();
         return WfProcessInstanceConvert.INSTANCE.convertDOToBO(wfProcessInstanceDO);
     }
 
     @Override
-    public List<WfProcessInstanceBO> getProcessListByUserId(String piStarter) {
-        QueryWrapper<WfProcessInstanceDO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("pi_starter",piStarter);
-        List<WfProcessInstanceBO> wfProcessInstanceBOList = new ArrayList<>();
-        List<WfProcessInstanceDO> wfProcessInstanceDOList = wfProcessInstanceMapper.selectList(queryWrapper);
+    public List<ProcessInstanceBO> getProcessListByUserId(String piStarter) {
+        List<ProcessInstanceBO> wfProcessInstanceBOList = new ArrayList<>();
+        List<WfProcessInstanceDO> wfProcessInstanceDOList = (List<WfProcessInstanceDO>) wfProcessInstanceMapper.findAllByPiStarter(piStarter);
         for(WfProcessInstanceDO wfProcessInstanceDO : wfProcessInstanceDOList){
             wfProcessInstanceBOList.add(WfProcessInstanceConvert.INSTANCE.convertDOToBO(wfProcessInstanceDO));
         }
         return wfProcessInstanceBOList;
     }
 
-    public void haha() {
-        System.out.println("haha");
-    }
-
-
-    private void sendScheduleRequestMessage(WfProcessInstanceMessage wfProcessInstanceMessage) {
-        rocketMQTemplate.convertAndSend(ScheduleRequestMessage.TOPIC, new ScheduleRequestMessage().setWfProcessInstanceMessage(wfProcessInstanceMessage));
+    private void sendScheduleRequestMessage(ProcessInstanceMessage wfProcessInstanceMessage) {
+        emitter.send(new ScheduleRequestMessage().setProcessInstanceMessage(wfProcessInstanceMessage));
     }
 }

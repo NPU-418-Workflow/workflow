@@ -1,59 +1,59 @@
 package me.danght.workflow.scheduler.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.oilpeddler.wfengine.common.api.formservice.WfProcessParamsRelationService;
-import com.oilpeddler.wfengine.common.api.scheduleservice.WfProcessDefinitionService;
-import com.oilpeddler.wfengine.common.bo.WfProcessDefinitionBO;
-import com.oilpeddler.wfengine.common.dto.WfProcessParamsRelationDTO;
-import com.oilpeddler.wfengine.common.dto.WfProcessTemplateDTO;
-import com.oilpeddler.wfengine.schedulecomponent.convert.WfProcessDefinitionConvert;
-import com.oilpeddler.wfengine.schedulecomponent.dao.WfProcessDefinitionMapper;
-import com.oilpeddler.wfengine.schedulecomponent.dao.WfProcessTemplateMapper;
-import com.oilpeddler.wfengine.schedulecomponent.dao.redis.BpmnModelCacheDao;
-import com.oilpeddler.wfengine.schedulecomponent.dataobject.WfProcessDefinitionDO;
-import com.oilpeddler.wfengine.schedulecomponent.dataobject.WfProcessTemplateDO;
-import com.oilpeddler.wfengine.schedulecomponent.element.BpmnModel;
-import com.oilpeddler.wfengine.schedulecomponent.element.DataParam;
-import com.oilpeddler.wfengine.schedulecomponent.element.StartEvent;
-import com.oilpeddler.wfengine.schedulecomponent.element.UserTask;
-import com.oilpeddler.wfengine.schedulecomponent.tools.BpmnXMLConvertUtil;
-import org.apache.dubbo.config.annotation.Reference;
-import org.apache.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import me.danght.workflow.common.api.form.ProcessParamsRelationService;
+import me.danght.workflow.common.api.schduler.ProcessDefinitionService;
+import me.danght.workflow.common.bo.ProcessDefinitionBO;
+import me.danght.workflow.common.dto.ProcessParamsRelationDTO;
+import me.danght.workflow.common.dto.ProcessTemplateDTO;
+import me.danght.workflow.scheduler.convert.WfProcessDefinitionConvert;
+import me.danght.workflow.scheduler.dao.WfProcessDefinitionMapper;
+import me.danght.workflow.scheduler.dao.WfProcessTemplateMapper;
+import me.danght.workflow.scheduler.dao.redis.BpmnModelCacheDao;
+import me.danght.workflow.scheduler.dataobject.WfProcessDefinitionDO;
+import me.danght.workflow.scheduler.dataobject.WfProcessTemplateDO;
+import me.danght.workflow.scheduler.element.BpmnModel;
+import me.danght.workflow.scheduler.element.DataParam;
+import me.danght.workflow.scheduler.element.StartEvent;
+import me.danght.workflow.scheduler.element.UserTask;
+import me.danght.workflow.scheduler.tools.BpmnXMLConvertUtil;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@org.springframework.stereotype.Service
-@Service
-public class WfProcessDefinitionServiceImpl implements WfProcessDefinitionService {
-    @Autowired
+@DubboService(interfaceClass = ProcessDefinitionService.class)
+@Singleton
+public class WfProcessDefinitionServiceImpl implements ProcessDefinitionService {
+
+    @Inject
     WfProcessDefinitionMapper wfProcessDefinitionMapper;
 
-    @Autowired
+    @Inject
     WfProcessTemplateMapper wfProcessTemplateMapper;
 
-    @Reference
-    WfProcessParamsRelationService wfProcessParamsRelationService;
+    @DubboReference
+    ProcessParamsRelationService wfProcessParamsRelationService;
 
-    @Autowired
+    @Inject
     BpmnModelCacheDao bpmnModelCacheDao;
 
     @Override
-    public WfProcessDefinitionBO getWfProcessDefinitionById(String id) {
-        WfProcessDefinitionDO wfProcessDefinitionDO = wfProcessDefinitionMapper.selectById(id);
-        WfProcessDefinitionBO wfProcessDefinitionBO = WfProcessDefinitionConvert.INSTANCE.convertDOToBO(wfProcessDefinitionDO);
-        WfProcessTemplateDO wfProcessTemplateDO = wfProcessTemplateMapper.selectById(wfProcessDefinitionDO.getPtId());
+    public ProcessDefinitionBO getWfProcessDefinitionById(String id) {
+        WfProcessDefinitionDO wfProcessDefinitionDO = wfProcessDefinitionMapper.findById(id).get();
+        ProcessDefinitionBO wfProcessDefinitionBO = WfProcessDefinitionConvert.INSTANCE.convertDOToBO(wfProcessDefinitionDO);
+        WfProcessTemplateDO wfProcessTemplateDO = wfProcessTemplateMapper.findById(wfProcessDefinitionDO.getPtId()).get();
         wfProcessDefinitionBO.setPtContent(wfProcessTemplateDO.getPtContent());
-        //wfProcessDefinitionBO.setBpmnModel(BpmnXMLConvertUtil.ConvertToBpmnModel(wfProcessDefinitionBO.getPtContent()));
         return wfProcessDefinitionBO;
     }
 
     @Override
-    public WfProcessDefinitionBO generatePDFromTemplateFile(WfProcessTemplateDTO wfProcessTemplateDTO) {
+    public ProcessDefinitionBO generatePDFromTemplateFile(ProcessTemplateDTO wfProcessTemplateDTO) {
         BpmnModel bpmnModel = BpmnXMLConvertUtil.ConvertToBpmnModel(wfProcessTemplateDTO.getPtContent());
-        StartEvent startEvent = (StartEvent)bpmnModel.getProcess().getStartEvent();
+        StartEvent startEvent = (StartEvent) bpmnModel.getProcess().getStartEvent();
         WfProcessDefinitionDO wfProcessDefinitionDO = new WfProcessDefinitionDO()
                 .setPtId(wfProcessTemplateDTO.getId())
                 .setPdName(bpmnModel.getName())
@@ -61,17 +61,16 @@ public class WfProcessDefinitionServiceImpl implements WfProcessDefinitionServic
                 .setStartForm(startEvent.getPageKey());
         wfProcessDefinitionDO.setCreatetime(new Date());
         wfProcessDefinitionDO.setUpdatetime(wfProcessDefinitionDO.getCreatetime());
-        wfProcessDefinitionMapper.insert(wfProcessDefinitionDO);
+        wfProcessDefinitionMapper.save(wfProcessDefinitionDO);
         bpmnModelCacheDao.set(wfProcessDefinitionDO.getId(),bpmnModel);
-        /**
-         * 构造参数映射关系
-         */
+
         List<UserTask> userTaskList =  bpmnModel.getProcess().getUserTaskList();
         for(UserTask userTask : userTaskList){
-            if(userTask.getParamList() == null)
+            if(userTask.getParamList() == null) {
                 continue;
+            }
             for(DataParam dataParam : userTask.getParamList()){
-                WfProcessParamsRelationDTO wfProcessParamsRelationDTO = new WfProcessParamsRelationDTO()
+                ProcessParamsRelationDTO wfProcessParamsRelationDTO = new ProcessParamsRelationDTO()
                         .setPpName(dataParam.getPpName())
                         .setPpLevel("02")
                         .setPpType(dataParam.getPpType())
@@ -85,7 +84,7 @@ public class WfProcessDefinitionServiceImpl implements WfProcessDefinitionServic
         }
 
         for(DataParam dataParam : ((StartEvent) bpmnModel.getProcess().getStartEvent()).getParamList()){
-            WfProcessParamsRelationDTO wfProcessParamsRelationDTO = new WfProcessParamsRelationDTO()
+            ProcessParamsRelationDTO wfProcessParamsRelationDTO = new ProcessParamsRelationDTO()
                     .setPpName(dataParam.getPpName())
                     .setPpLevel("02")
                     .setPpType(dataParam.getPpType())
@@ -102,10 +101,9 @@ public class WfProcessDefinitionServiceImpl implements WfProcessDefinitionServic
 
 
     @Override
-    public List<WfProcessDefinitionBO> queryDefinitionList() {
-        QueryWrapper<WfProcessDefinitionDO> queryWrapper = new QueryWrapper<>();
-        List<WfProcessDefinitionDO> wfProcessDefinitionDOList = wfProcessDefinitionMapper.selectList(queryWrapper);
-        List<WfProcessDefinitionBO> wfProcessDefinitionBOList = new ArrayList<>();
+    public List<ProcessDefinitionBO> queryDefinitionList() {
+        List<WfProcessDefinitionDO> wfProcessDefinitionDOList = (List<WfProcessDefinitionDO>) wfProcessDefinitionMapper.findAll();
+        List<ProcessDefinitionBO> wfProcessDefinitionBOList = new ArrayList<>();
         for(WfProcessDefinitionDO wfProcessDefinitionDO : wfProcessDefinitionDOList){
             wfProcessDefinitionBOList.add(WfProcessDefinitionConvert.INSTANCE.convertDOToBO(wfProcessDefinitionDO));
         }

@@ -13,4 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface WfActivtityInstanceMapper extends CrudRepository<WfActivityInstanceDO, String> {
     int decrementActiveNum(String id);
+    Iterable<WfActivityInstanceDO> findAllByPiIdAndUserTaskNo(String piId, String userTaskNo);
+    void deleteByPiId(String piId);
 }

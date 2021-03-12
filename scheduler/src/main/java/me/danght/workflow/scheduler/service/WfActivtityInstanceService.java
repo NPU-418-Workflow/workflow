@@ -11,7 +11,7 @@ import java.util.Map;
 public interface WfActivtityInstanceService {
     ActivityInstanceBO getById(String id);
 
-    ActivityInstanceBO getOneByMap(Map<String, Object> conditionMap);
+    ActivityInstanceBO getByPiIdAndUserTaskNo(String piId, String userTaskNo);
 
     void update(ActivityInstanceDTO wfActivityInstanceDTO);
 

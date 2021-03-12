@@ -20,8 +20,6 @@ public interface ProcessInstanceService {
 
     void changeProcessState(String piId, String state);
 
-    void haha();
-
     ProcessInstanceBO getById(String id);
 
     List<ProcessInstanceBO> getProcessListByUserId(String piStarter);

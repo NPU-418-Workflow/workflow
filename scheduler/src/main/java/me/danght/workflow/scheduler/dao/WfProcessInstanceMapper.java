@@ -12,5 +12,5 @@ import org.springframework.data.repository.CrudRepository;
  * @since 2019-10-07
  */
 public interface WfProcessInstanceMapper extends CrudRepository<WfProcessInstanceDO, String> {
-
+    Iterable<WfProcessInstanceDO> findAllByPiStarter(String piStarter);
 }

@@ -13,6 +13,6 @@ import java.util.Optional;
  * @author wenxiang
  * @since 2019-10-09
  */
-public interface ProcessParamsRelationMapper extends CrudRepository<ProcessParamsRelationDO, String> {
+public interface ProcessParamsRelationRepository extends CrudRepository<ProcessParamsRelationDO, String> {
     Optional<ProcessParamsRelationDO> findByBusinessNameAndPdIdAndTaskNo(String businessName, String pdId, String taskNo);
 }

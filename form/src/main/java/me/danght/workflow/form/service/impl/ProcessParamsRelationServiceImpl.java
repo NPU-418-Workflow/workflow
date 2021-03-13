@@ -1,10 +1,10 @@
-package me.danght.workflow.service.impl;
+package me.danght.workflow.form.service.impl;
 
 import me.danght.workflow.common.api.form.ProcessParamsRelationService;
 import me.danght.workflow.common.dto.ProcessParamsRelationDTO;
-import me.danght.workflow.convert.ProcessParamsRelationConvert;
-import me.danght.workflow.dao.ProcessParamsRelationMapper;
-import me.danght.workflow.dataobject.ProcessParamsRelationDO;
+import me.danght.workflow.form.convert.ProcessParamsRelationConvert;
+import me.danght.workflow.form.dao.ProcessParamsRelationMapper;
+import me.danght.workflow.form.dataobject.ProcessParamsRelationDO;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.inject.Inject;

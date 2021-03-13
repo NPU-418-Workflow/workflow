@@ -1,6 +1,6 @@
-package me.danght.workflow.dao;
+package me.danght.workflow.form.dao;
 
-import me.danght.workflow.dataobject.ProcessParamsRelationDO;
+import me.danght.workflow.form.dataobject.ProcessParamsRelationDO;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

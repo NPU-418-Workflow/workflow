@@ -1,7 +1,7 @@
-package me.danght.workflow.convert;
+package me.danght.workflow.form.convert;
 
-import me.danght.workflow.dataobject.BusinessFormDO;
-import me.danght.workflow.dto.BusinessFormDTO;
+import me.danght.workflow.form.dataobject.BusinessFormDO;
+import me.danght.workflow.form.dto.BusinessFormDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;

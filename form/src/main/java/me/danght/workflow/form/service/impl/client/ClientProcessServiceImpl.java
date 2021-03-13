@@ -1,4 +1,4 @@
-package me.danght.workflow.service.impl.client;
+package me.danght.workflow.form.service.impl.client;
 
 import me.danght.workflow.common.api.form.ClientProcessService;
 import me.danght.workflow.common.api.form.ProcessParamsRelationService;
@@ -10,8 +10,8 @@ import me.danght.workflow.common.dataobject.ParmObject;
 import me.danght.workflow.common.dto.ProcessParamsRelationDTO;
 import me.danght.workflow.common.msg.ProcessInstanceMessage;
 import me.danght.workflow.common.msg.ScheduleRequestMessage;
-import me.danght.workflow.dto.BusinessFormDTO;
-import me.danght.workflow.service.BusinessFormService;
+import me.danght.workflow.form.dto.BusinessFormDTO;
+import me.danght.workflow.form.service.BusinessFormService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.eclipse.microprofile.reactive.messaging.Channel;

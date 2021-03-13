@@ -1,9 +1,9 @@
-package me.danght.workflow.dao.redis;
+package me.danght.workflow.form.dao.redis;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.quarkus.redis.client.RedisClient;
 import me.danght.workflow.common.serialization.BaseMapper;
-import me.danght.workflow.dataobject.ProcessParamsRelationDO;
+import me.danght.workflow.form.dataobject.ProcessParamsRelationDO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

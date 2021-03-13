@@ -1,4 +1,4 @@
-package me.danght.workflow.dataobject;
+package me.danght.workflow.form.dataobject;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

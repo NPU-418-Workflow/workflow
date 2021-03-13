@@ -1,10 +1,10 @@
-package me.danght.workflow.service.impl;
+package me.danght.workflow.form.service.impl;
 
-import me.danght.workflow.convert.BusinessFormConvert;
-import me.danght.workflow.dao.BusinessFormMapper;
-import me.danght.workflow.dataobject.BusinessFormDO;
-import me.danght.workflow.dto.BusinessFormDTO;
-import me.danght.workflow.service.BusinessFormService;
+import me.danght.workflow.form.convert.BusinessFormConvert;
+import me.danght.workflow.form.dao.BusinessFormMapper;
+import me.danght.workflow.form.dataobject.BusinessFormDO;
+import me.danght.workflow.form.dto.BusinessFormDTO;
+import me.danght.workflow.form.service.BusinessFormService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -1,7 +1,7 @@
-package me.danght.workflow.convert;
+package me.danght.workflow.form.convert;
 
 import me.danght.workflow.common.dto.ProcessParamsRelationDTO;
-import me.danght.workflow.dataobject.ProcessParamsRelationDO;
+import me.danght.workflow.form.dataobject.ProcessParamsRelationDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;

@@ -1,4 +1,4 @@
-package me.danght.workflow.dataobject;
+package me.danght.workflow.form.dataobject;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;

@@ -1,4 +1,4 @@
-package me.danght.workflow.dto;
+package me.danght.workflow.form.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

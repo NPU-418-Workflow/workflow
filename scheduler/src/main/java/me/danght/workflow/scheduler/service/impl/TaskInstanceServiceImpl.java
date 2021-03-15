@@ -21,6 +21,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.transaction.Transactional;
@@ -28,7 +29,7 @@ import java.util.*;
 
 
 @DubboService(interfaceClass = TaskInstanceService.class)
-@Singleton
+@ApplicationScoped
 public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Inject
@@ -79,13 +80,13 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
      */
     @Override
     public int count(TaskInstanceQueryDTO taskInstanceQueryDTO) {
-        return taskInstanceRepository.countByTiStatusAndAiId(taskInstanceQueryDTO.getTiStatus(), taskInstanceQueryDTO.getAiId());
+        return (int) taskInstanceRepository.countByTiStatusAndAiId(taskInstanceQueryDTO.getTiStatus(), taskInstanceQueryDTO.getAiId());
     }
 
 
     @Override
     public List<TaskInstanceDTO> findRelatedTaskList(String aiId) {
-        List<TaskInstanceDO> taskInstanceDOList = (List<TaskInstanceDO>) taskInstanceRepository
+        List<TaskInstanceDO> taskInstanceDOList = taskInstanceRepository
                 .findAllByTiStatusAndAiId(TaskInstanceState.TASK_INSTANCE_STATE_COMPLETED, aiId);
         List<TaskInstanceDTO> wfTaskInstanceDTOList = new ArrayList<>();
         for(TaskInstanceDO taskInstanceDO : taskInstanceDOList){
@@ -96,7 +97,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Override
     public void moveRelatedTaskToHistory(String aiId) {
-        List<TaskInstanceDO> taskInstanceDOList = (List<TaskInstanceDO>) taskInstanceRepository.findAllByAiId(aiId);
+        List<TaskInstanceDO> taskInstanceDOList = taskInstanceRepository.findAllByAiId(aiId);
         for(TaskInstanceDO taskInstanceDO : taskInstanceDOList){
             TaskHistoryInstanceDO taskHistoryInstanceDO = TaskInstanceConvert.INSTANCE.convertRunToHistory(taskInstanceDO);
             taskHistoryInstanceDO.setTiStatus(TaskInstanceState.TASK_INSTANCE_STATE_PAST);
@@ -147,8 +148,12 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Override
     public TaskInstanceDTO updateById(TaskInstanceDTO taskInstanceDTO) {
+        TaskInstanceDO taskInstanceDO = taskInstanceRepository.findById(taskInstanceDTO.getId()).orElse(null);
+        if (taskInstanceDO == null) return null;
+        taskInstanceDO.setTiAssigner(taskInstanceDTO.getTiAssigner());
+        taskInstanceDO.setTiAssignerType("0");
         //修改为修改任务执行人种类和执行人
-        taskInstanceRepository.updateAssignerType(taskInstanceDTO.getId(),taskInstanceDTO.getTiAssigner());
+        taskInstanceRepository.save(taskInstanceDO);
         //其实还应该回查下是否真的获取到了，高并发情况下有可能被别人抢了，有点懒就没写，而且同一个任务应该不会太多人抢。
         redisClient.set(List.of(taskInstanceDTO.getId(), "1"));
         return taskInstanceDTO;
@@ -156,8 +161,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Override
     public List<TaskInstanceBO> selectUnCompletedTask(String tiAssigner, String tiAssignerType) {
-        List<TaskInstanceDO> taskInstanceDOList = (List<TaskInstanceDO>) taskInstanceRepository
-                .findAllByTiAssignerAndTiAssignerTrue(tiAssigner, tiAssignerType);
+        List<TaskInstanceDO> taskInstanceDOList = taskInstanceRepository
+                .findAllByTiAssignerAndTiAssignerType(tiAssigner, tiAssignerType);
         List<TaskInstanceBO> taskInstanceBOList = new ArrayList<>();
         for(TaskInstanceDO taskInstanceDO : taskInstanceDOList){
             TaskInstanceBO taskInstanceBO = TaskInstanceConvert.INSTANCE.convertDOToBO(taskInstanceDO);
@@ -173,8 +178,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Override
     public List<TaskInstanceBO> selectUnObtainedTask(String tiAssigner) {
-        List<TaskInstanceDO> taskInstanceDOList = (List<TaskInstanceDO>) taskInstanceRepository
-                .findAllByTiAssignerAndTiAssignerTrue(tiAssigner, "1");
+        List<TaskInstanceDO> taskInstanceDOList = taskInstanceRepository
+                .findAllByTiAssignerAndTiAssignerType(tiAssigner, "1");
         List<TaskInstanceBO> taskInstanceBOList = new ArrayList<>();
         for(TaskInstanceDO taskInstanceDO : taskInstanceDOList){
             TaskInstanceBO wfTaskInstanceBO = TaskInstanceConvert.INSTANCE.convertDOToBO(taskInstanceDO);

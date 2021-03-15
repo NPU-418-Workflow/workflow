@@ -60,9 +60,11 @@ public abstract class Gateway extends Node {
     public void merge(Token token){
         //判断当前token是不是父token的最后一个子token，如果是就把爹弄来，不是就删了自个了事
         tokenRepository.deleteById(token.getId());
-        tokenRepository.decrementChildNum(token.getParentId());
         Token parentToken = tokenRepository.findById(token.getParentId()).orElse(null);
-        if(parentToken != null && parentToken.getChildNum() == 0){
+        if (parentToken == null) return;
+        parentToken.setChildNum(parentToken.getChildNum() - 1);
+        tokenRepository.save(parentToken);
+        if(parentToken.getChildNum() == 0){
             parentToken.setCurrentNode(this);
             parentToken.setElementNo(this.getNo());
             parentToken.setChildren(new ArrayList<>());

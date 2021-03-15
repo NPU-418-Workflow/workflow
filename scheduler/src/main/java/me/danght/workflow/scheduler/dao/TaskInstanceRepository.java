@@ -3,6 +3,7 @@ package me.danght.workflow.scheduler.dao;
 import me.danght.workflow.scheduler.dataobject.TaskInstanceDO;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,15 +16,13 @@ import java.util.Optional;
  */
 public interface TaskInstanceRepository extends CrudRepository<TaskInstanceDO, String> {
 
-    void updateAssignerType(String id,String ti_assigner);
-
-    int countByTiStatusAndAiId(String tiStatus, String aiId);
+    long countByTiStatusAndAiId(String tiStatus, String aiId);
 
     Optional<TaskInstanceDO> findByPiId(String piId);
 
-    Iterable<TaskInstanceDO> findAllByAiId(String aiId);
+    List<TaskInstanceDO> findAllByAiId(String aiId);
 
-    Iterable<TaskInstanceDO> findAllByTiStatusAndAiId(String tiStatus, String aiId);
+    List<TaskInstanceDO> findAllByTiStatusAndAiId(String tiStatus, String aiId);
 
-    Iterable<TaskInstanceDO> findAllByTiAssignerAndTiAssignerTrue(String tiAssigner, String tiAssignerType);
+    List<TaskInstanceDO> findAllByTiAssignerAndTiAssignerType(String tiAssigner, String tiAssignerType);
 }

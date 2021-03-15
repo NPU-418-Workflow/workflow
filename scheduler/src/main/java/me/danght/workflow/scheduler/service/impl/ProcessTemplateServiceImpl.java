@@ -6,10 +6,11 @@ import me.danght.workflow.scheduler.dao.ProcessTemplateRepository;
 import me.danght.workflow.scheduler.dataobject.ProcessTemplateDO;
 import me.danght.workflow.scheduler.service.ProcessTemplateService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
+@ApplicationScoped
 public class ProcessTemplateServiceImpl implements ProcessTemplateService {
 
     @Inject

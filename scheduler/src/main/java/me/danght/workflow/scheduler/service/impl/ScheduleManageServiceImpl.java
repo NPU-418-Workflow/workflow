@@ -8,11 +8,12 @@ import me.danght.workflow.scheduler.element.UserTask;
 import me.danght.workflow.scheduler.service.ScheduleManageService;
 import me.danght.workflow.scheduler.element.Process;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Date;
 
-@Singleton
+@ApplicationScoped
 public class ScheduleManageServiceImpl implements ScheduleManageService {
 
     @Inject

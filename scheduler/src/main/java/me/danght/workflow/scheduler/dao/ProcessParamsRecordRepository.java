@@ -3,6 +3,7 @@ package me.danght.workflow.scheduler.dao;
 import me.danght.workflow.scheduler.dataobject.ProcessParamsRecordDO;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,11 +21,11 @@ public interface ProcessParamsRecordRepository extends CrudRepository<ProcessPar
 
     Optional<ProcessParamsRecordDO> findByEnginePpNameAndAiId(String enginePpName, String aiId);
 
-    Iterable<ProcessParamsRecordDO> findAllByTiId(String tiId);
+    List<ProcessParamsRecordDO> findAllByTiId(String tiId);
 
-    Iterable<ProcessParamsRecordDO> findAllByTiIdAndStatusAndPpRecordLevel(String tiId, String status, String ppRecordLevel);
+    List<ProcessParamsRecordDO> findAllByTiIdAndStatusAndPpRecordLevel(String tiId, String status, String ppRecordLevel);
 
-    Iterable<ProcessParamsRecordDO> findAllByPpRelationIdAndAiIdAndStatusAndPpRecordLevel(String ppRelationId, String aiId, String status, String ppRecordLevel);
+    List<ProcessParamsRecordDO> findAllByPpRelationIdAndAiIdAndStatusAndPpRecordLevel(String ppRelationId, String aiId, String status, String ppRecordLevel);
 
-    Iterable<ProcessParamsRecordDO> findAllByEnginePpNameAndAiIdOrderByCreatetimeDesc(String enginePpName, String aiId, String status);
+    List<ProcessParamsRecordDO> findAllByEnginePpNameAndAiIdAndStatusOrderByCreateTimeDesc(String enginePpName, String aiId, String status);
 }

@@ -8,7 +8,7 @@ import io.quarkus.runtime.annotations.QuarkusMain;
  * @author DangHT
  * @date 2021/03/13
  */
-@QuarkusMain
+@QuarkusMain(name = "app")
 public class Main {
 
     public static void main(String[] args) {

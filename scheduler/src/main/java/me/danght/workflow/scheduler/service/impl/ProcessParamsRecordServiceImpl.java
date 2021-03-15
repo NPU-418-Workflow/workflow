@@ -14,11 +14,12 @@ import me.danght.workflow.scheduler.dataobject.ProcessParamsRecordDO;
 import me.danght.workflow.scheduler.service.ActivityInstanceService;
 import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
 
-@Singleton
+@ApplicationScoped
 public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordService {
 
     @Inject
@@ -77,12 +78,12 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
     public void calculateActivityData(ActivityInstanceDTO activityInstanceDTO, String tiId){
         //普通活动，直接把任务参数复制一下弄成活动参数就行啦
         if(activityInstanceDTO.getAiCategory().equals(ActivityInstanceCategory.ACTIVITY_CATEGORY_SINGLE)){
-            List<ProcessParamsRecordDO> processParamsRecordDOList = (List<ProcessParamsRecordDO>) processParamsRecordRepository
+            List<ProcessParamsRecordDO> processParamsRecordDOList = processParamsRecordRepository
                     .findAllByTiIdAndStatusAndPpRecordLevel(tiId, ProcessParamState.PROCESS_PARAM_EFFECT, ProcessParamRecordLevel.PROCESS_PARAM_RECORD_LEVEL_TASK);
             for(ProcessParamsRecordDO processParamsRecordDO : processParamsRecordDOList){
                 String deleteId = processParamsRecordDO.getId();
                 //TODO 1025新增之前如果有驳回的循环操作生成过改活动级别参数的话就先置失效，后面有了历史库再挪过去
-                List<ProcessParamsRecordDO> processParamsRecordDOPreList = (List<ProcessParamsRecordDO>) processParamsRecordRepository
+                List<ProcessParamsRecordDO> processParamsRecordDOPreList = processParamsRecordRepository
                         .findAllByPpRelationIdAndAiIdAndStatusAndPpRecordLevel(
                                 processParamsRecordDO.getPpRelationId(),
                                 processParamsRecordDO.getAiId(),
@@ -105,7 +106,7 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
                 processParamsRecordRepository.deleteById(deleteId);
             }
         }else {//TODO 会签活动，所有任务数据相与，暂时版本，待优化
-            List<ProcessParamsRecordDO> taskLevelRecordList = (List<ProcessParamsRecordDO>) processParamsRecordRepository.findAllByTiId(tiId);
+            List<ProcessParamsRecordDO> taskLevelRecordList = processParamsRecordRepository.findAllByTiId(tiId);
             List<ProcessParamsRecordDO> activityRecordList = new ArrayList<>();
             for(ProcessParamsRecordDO processParamsRecordDO : taskLevelRecordList){
                 processParamsRecordDO.setUpdateTime(new Date());
@@ -120,7 +121,7 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
             //计算活动级参数并存储
             for(ProcessParamsRecordDO activityRecordDO : activityRecordList){
                 activityRecordDO.setId(null);
-                List<ProcessParamsRecordDO> taskRecordDoList = (List<ProcessParamsRecordDO>) processParamsRecordRepository
+                List<ProcessParamsRecordDO> taskRecordDoList = processParamsRecordRepository
                         .findAllByPpRelationIdAndAiIdAndStatusAndPpRecordLevel(
                                 activityRecordDO.getPpRelationId(),
                                 activityRecordDO.getAiId(),
@@ -141,7 +142,7 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
                  * 限制，但还是也把之前的置为失效，安全起见。
                  * TODO 其实这应该删除之前的活动数据，并转移到历史库
                  */
-                List<ProcessParamsRecordDO> processParamsRecordDOList = (List<ProcessParamsRecordDO>) processParamsRecordRepository
+                List<ProcessParamsRecordDO> processParamsRecordDOList = processParamsRecordRepository
                         .findAllByPpRelationIdAndAiIdAndStatusAndPpRecordLevel(
                                 activityRecordDO.getPpRelationId(),
                                 activityRecordDO.getAiId(),
@@ -172,8 +173,8 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
     @Override
     public ProcessParamsRecordBO getByEnginePpName(String enginePpName, String processInstanceId, String pdId, String userTaskNo) {
         ActivityInstanceBO activityInstanceBO = activityInstanceService.getByPiIdAndUserTaskNo(processInstanceId, userTaskNo);
-        List<ProcessParamsRecordDO> processParamsRecordDOList = (List<ProcessParamsRecordDO>) processParamsRecordRepository
-                .findAllByEnginePpNameAndAiIdOrderByCreatetimeDesc(
+        List<ProcessParamsRecordDO> processParamsRecordDOList = processParamsRecordRepository
+                .findAllByEnginePpNameAndAiIdAndStatusOrderByCreateTimeDesc(
                         enginePpName,
                         activityInstanceBO.getId(),
                         ProcessParamState.PROCESS_PARAM_EFFECT

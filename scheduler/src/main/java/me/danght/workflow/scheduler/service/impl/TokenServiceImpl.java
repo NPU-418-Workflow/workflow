@@ -7,11 +7,12 @@ import me.danght.workflow.scheduler.element.UserTask;
 import me.danght.workflow.scheduler.element.Process;
 import me.danght.workflow.scheduler.service.TokenService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 
-@Singleton
+@ApplicationScoped
 public class TokenServiceImpl implements TokenService {
 
     @Inject
@@ -39,7 +40,7 @@ public class TokenServiceImpl implements TokenService {
         if (currentToken == null) return null;
         Token parent = currentToken;
         while (!"0".equals(parent.getParentId())){
-            List<Token> concurrentTokens = (List<Token>) tokenRepository.findAllByParentIdAndIdIsNot(parent.getParentId(), parent.getId());
+            List<Token> concurrentTokens = tokenRepository.findAllByParentIdAndIdIsNot(parent.getParentId(), parent.getId());
             concurrentTokens.add(parent);
             parent = tokenRepository.findById(parent.getParentId()).orElse(null);
             if (parent == null) return null;

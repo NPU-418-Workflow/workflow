@@ -15,6 +15,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.List;
  * @since 2019-10-08
  */
 @DubboService(interfaceClass = ProcessInstanceService.class)
-@Singleton
+@ApplicationScoped
 public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 
     @Inject
@@ -95,7 +96,7 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
     @Override
     public List<ProcessInstanceBO> getProcessListByUserId(String piStarter) {
         List<ProcessInstanceBO> wfProcessInstanceBOList = new ArrayList<>();
-        List<ProcessInstanceDO> processInstanceDOList = (List<ProcessInstanceDO>) processInstanceRepository.findAllByPiStarter(piStarter);
+        List<ProcessInstanceDO> processInstanceDOList = processInstanceRepository.findAllByPiStarter(piStarter);
         for(ProcessInstanceDO processInstanceDO : processInstanceDOList){
             wfProcessInstanceBOList.add(ProcessInstanceConvert.INSTANCE.convertDOToBO(processInstanceDO));
         }

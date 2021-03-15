@@ -19,6 +19,7 @@ import me.danght.workflow.scheduler.tools.BpmnXMLConvertUtil;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 @DubboService(interfaceClass = ProcessDefinitionService.class)
-@Singleton
+@ApplicationScoped
 public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
 
     @Inject

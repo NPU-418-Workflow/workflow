@@ -17,6 +17,7 @@ import me.danght.workflow.scheduler.service.ActivityInstanceService;
 import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 import org.apache.dubbo.config.annotation.DubboService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
@@ -30,7 +31,7 @@ import java.util.*;
  * @since 2019-10-09
  */
 @DubboService(interfaceClass = ActivityInstanceService.class)
-@Singleton
+@ApplicationScoped
 public class ActivityInstanceServiceImpl implements ActivityInstanceService {
 
     @Inject
@@ -53,7 +54,7 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
 
     @Override
     public ActivityInstanceBO getByPiIdAndUserTaskNo(String piId, String userTaskNo) {
-        List<ActivityInstanceDO> activityInstanceDOList = (List<ActivityInstanceDO>) activityInstanceRepository.findAllByPiIdAndUserTaskNo(piId, userTaskNo);
+        List<ActivityInstanceDO> activityInstanceDOList = activityInstanceRepository.findAllByPiIdAndUserTaskNo(piId, userTaskNo);
         return activityInstanceDOList.size() == 0 ? null : ActivityInstanceConvert.INSTANCE.convertDOToBO(activityInstanceDOList.get(0));
     }
 
@@ -73,7 +74,7 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
         List<ActivityInstanceBO> activityInstanceBOList = new ArrayList<>();
         for(BaseElement baseElement : userTaskList){
             UserTask userTask = (UserTask)baseElement;
-            List<ActivityInstanceDO> activityInstanceDOList = (List<ActivityInstanceDO>) activityInstanceRepository.findAllByPiIdAndUserTaskNo(piId, userTask.getNo());
+            List<ActivityInstanceDO> activityInstanceDOList = activityInstanceRepository.findAllByPiIdAndUserTaskNo(piId, userTask.getNo());
             ActivityInstanceDO activityInstanceDO = activityInstanceDOList.get(0);
             List<String> assList = new ArrayList<>();
             if(userTask.getAssignees() != null && userTask.getAssignees().size() > 0) {
@@ -126,7 +127,7 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
 
     @Override
     public ActivityInstanceBO addStartEventActivity(StartEvent startEvent, String piId, String pdId, String piStarter) {
-        List<ActivityInstanceDO> activityInstanceDOList = (List<ActivityInstanceDO>) activityInstanceRepository.findAllByPiIdAndUserTaskNo(piId, startEvent.getNo());
+        List<ActivityInstanceDO> activityInstanceDOList = activityInstanceRepository.findAllByPiIdAndUserTaskNo(piId, startEvent.getNo());
         ActivityInstanceDO activityInstanceDO = activityInstanceDOList.get(0);
         if(activityInstanceDO != null){
             activityInstanceDO.setAiAssignerId(JSON.toJSONString(piStarter));

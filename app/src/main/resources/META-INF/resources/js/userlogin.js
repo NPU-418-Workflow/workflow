@@ -1,5 +1,6 @@
 function sub() {
-    $.post("/users/loginValidate",
+    $.post(
+        "/users/loginValidate",
         {
             uiName:$("#uiName").val(),
         },
@@ -7,6 +8,7 @@ function sub() {
             alert("数据: \n" + data + "\n状态: " + status);
             var obj = JSON.parse(data);
             window.location.replace("index.html?id="+obj.id+"&uiName="+obj.uiName+"&tenantId="+obj.tenantId);
-        }
+        },
+        "application/json"
     );
 }

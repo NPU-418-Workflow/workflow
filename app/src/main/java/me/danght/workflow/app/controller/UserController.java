@@ -15,7 +15,6 @@ import me.danght.workflow.common.bo.TaskInstanceBO;
 import me.danght.workflow.common.constant.ParamType;
 import me.danght.workflow.common.constant.ProcessInstanceState;
 import me.danght.workflow.common.dataobject.ParmObject;
-import me.danght.workflow.common.serialization.BaseMapper;
 import org.apache.dubbo.config.annotation.DubboReference;
 
 import javax.inject.Inject;
@@ -36,15 +35,15 @@ public class UserController {
     @Inject
     LeaveInfoService leaveInfoService;
 
-    @DubboReference
+    @DubboReference(check = false)
     ClientProcessService clientProcessService;
 
-    @DubboReference
+    @DubboReference(check = false)
     ClientTaskService clientTaskService;
 
 
     @POST
-    @Path("/completeApproval")
+    @Path("completeApproval")
     public String completeApproval(
             @QueryParam("pdId") String pdId,
             @QueryParam("tiId") String tiId,
@@ -63,7 +62,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/queryUnObtainList")
+    @Path("queryUnObtainList")
     public String queryUnObtainList(@QueryParam("uiId") String uiId){
         UserInfoDTO userInfoDTO = userInfoService.queryUser(uiId);
 
@@ -73,7 +72,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/queryProcessList")
+    @Path("queryProcessList")
     public String queryProcessList(@QueryParam("uiId") String uiId){
         List<ProcessInstanceBO> wfProcessInstanceBOList = clientProcessService.getProcessListByUserId(uiId);
         JSONArray wfdArray = JSON.parseArray(JSONObject.toJSONString(wfProcessInstanceBOList));
@@ -81,21 +80,21 @@ public class UserController {
     }
 
     @POST
-    @Path("/obtainTask")
+    @Path("obtainTask")
     public String obtainTask(@QueryParam("taskId") String taskId, @QueryParam("uiId") String uiId) {
         clientTaskService.obtainTask(taskId,uiId);
         return "1";
     }
 
     @POST
-    @Path("/loginValidate")
+    @Path("loginValidate")
     public String loginValidate(@QueryParam("uiName") String uiName) {
         UserInfoDTO userInfoDTO = userInfoService.validateUser(uiName);
         return JSON.toJSONString(userInfoDTO);
     }
 
     @POST
-    @Path("/addLeave")
+    @Path("addLeave")
     public String addLeave(
             @QueryParam("uiId") String uiId,
             @QueryParam("durations") String durations,
@@ -114,7 +113,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/personinfo")
+    @Path("personinfo")
     public String personinfo(
             @QueryParam("pdId") String pdId,
             @QueryParam("tiId") String tiId,
@@ -127,7 +126,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/completedRead")
+    @Path("completedRead")
     public String completedRead(
             @QueryParam("pdId") String pdId,
             @QueryParam("tiId") String tiId,
@@ -137,7 +136,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/queryApprovalList")
+    @Path("queryApprovalList")
     public String queryApprovalList(
             @QueryParam("uiId") String uiId,
             @QueryParam("uiName") String uiName,
@@ -148,7 +147,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/queryUnTaskList")
+    @Path("queryUnTaskList")
     public String queryUnTaskList(@QueryParam("uiId") String uiId){
         List<TaskInstanceBO> wfTaskInstanceBOList = clientTaskService.selectUnCompletedTask(uiId,"0");
         JSONArray wfdArray = JSON.parseArray(JSONObject.toJSONString(wfTaskInstanceBOList));
@@ -156,7 +155,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/queryLeaveInfo")
+    @Path("queryLeaveInfo")
     public String queryLeaveInfo(@QueryParam("piBusinesskey") String piBusinesskey) {
         LeaveInfoDTO leaveInfoDTO = leaveInfoService.selectById(piBusinesskey);
         return JSON.toJSONString(leaveInfoDTO);

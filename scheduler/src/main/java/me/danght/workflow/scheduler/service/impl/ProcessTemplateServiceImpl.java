@@ -7,10 +7,17 @@ import me.danght.workflow.scheduler.dataobject.ProcessTemplateDO;
 import me.danght.workflow.scheduler.service.ProcessTemplateService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
+/**
+ * 流程模板服务
+ *
+ * @author wenxiang
+ * @author DangHT
+ */
 @ApplicationScoped
+@ActivateRequestContext
 public class ProcessTemplateServiceImpl implements ProcessTemplateService {
 
     @Inject

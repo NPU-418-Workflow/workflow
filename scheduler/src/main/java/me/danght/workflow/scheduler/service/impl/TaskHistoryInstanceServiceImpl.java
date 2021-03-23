@@ -8,11 +8,18 @@ import me.danght.workflow.scheduler.dataobject.TaskHistoryInstanceDO;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
+/**
+ * 历史任务服务
+ *
+ * @author wenxiang
+ * @author DangHT
+ */
 @DubboService(interfaceClass = TaskHistoryInstanceService.class)
 @ApplicationScoped
+@ActivateRequestContext
 public class TaskHistoryInstanceServiceImpl implements TaskHistoryInstanceService {
 
     @Inject

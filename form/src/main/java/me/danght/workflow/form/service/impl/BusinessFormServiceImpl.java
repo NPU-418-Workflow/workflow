@@ -6,10 +6,18 @@ import me.danght.workflow.form.dataobject.BusinessFormDO;
 import me.danght.workflow.form.dto.BusinessFormDTO;
 import me.danght.workflow.form.service.BusinessFormService;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+/**
+ * 业务表单服务
+ *
+ * @author wenxiang
+ * @author DangHT
+ */
+@ApplicationScoped
+@ActivateRequestContext
 public class BusinessFormServiceImpl implements BusinessFormService {
 
     @Inject

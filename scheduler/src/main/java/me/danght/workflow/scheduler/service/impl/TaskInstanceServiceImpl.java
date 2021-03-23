@@ -22,14 +22,20 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.transaction.Transactional;
 import java.util.*;
 
-
+/**
+ * 任务实例服务
+ *
+ * @author wenxiang
+ * @author DangHT
+ */
 @DubboService(interfaceClass = TaskInstanceService.class)
 @ApplicationScoped
+@ActivateRequestContext
 public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Inject

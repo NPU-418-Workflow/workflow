@@ -18,20 +18,20 @@ import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.*;
 
 /**
- * <p>
- *  服务实现类
- * </p>
+ *  活动实例服务
  *
  * @author wenxiang
+ * @author DangHT
  * @since 2019-10-09
  */
 @DubboService(interfaceClass = ActivityInstanceService.class)
 @ApplicationScoped
+@ActivateRequestContext
 public class ActivityInstanceServiceImpl implements ActivityInstanceService {
 
     @Inject

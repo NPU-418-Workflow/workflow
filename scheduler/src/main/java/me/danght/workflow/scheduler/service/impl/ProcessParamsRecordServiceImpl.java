@@ -9,16 +9,20 @@ import me.danght.workflow.scheduler.constant.ProcessParamRecordLevel;
 import me.danght.workflow.scheduler.constant.ProcessParamState;
 import me.danght.workflow.scheduler.convert.ProcessParamsRecordConvert;
 import me.danght.workflow.scheduler.dao.ProcessParamsRecordRepository;
-import me.danght.workflow.scheduler.dao.redis.WfProcessParamsRecordCacheDao;
 import me.danght.workflow.scheduler.dataobject.ProcessParamsRecordDO;
 import me.danght.workflow.scheduler.service.ActivityInstanceService;
 import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.*;
 
+/**
+ * 流程参数记录服务
+ *
+ * @author wenxiang
+ * @author DangHT
+ */
 @ApplicationScoped
 public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordService {
 
@@ -27,9 +31,6 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
 
     @Inject
     ActivityInstanceService activityInstanceService;
-
-    @Inject
-    WfProcessParamsRecordCacheDao wfProcessParamsRecordCacheDao;
 
     @Override
     public void recordRequiredData(String aiId, String tiId,Map<String, ParmObject> requiredData) {
@@ -56,7 +57,7 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
                     .setUpdateTime(new Date());
             processParamsRecordRepository.save(processParamsRecordDOTask);
 
-            ProcessParamsRecordDO processParamsRecordDO = processParamsRecordRepository.findByEnginePpNameAndAiId(entry.getKey(), aiId).get();
+            ProcessParamsRecordDO processParamsRecordDO = processParamsRecordRepository.findByEnginePpNameAndAiId(entry.getKey(), aiId).orElse(null);
             if(processParamsRecordDO == null){
                 processParamsRecordDO = new ProcessParamsRecordDO();
                 processParamsRecordDO.setAiId(aiId)

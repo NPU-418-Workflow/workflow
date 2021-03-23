@@ -17,17 +17,16 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * <p>
+ * 流程实例服务
  * 流程管理器开启新流程RPC服务
- * </p>
  *
  * @author wenxiang
+ * @author DangHT
  * @since 2019-10-08
  */
 @DubboService(interfaceClass = ProcessInstanceService.class)
@@ -95,12 +94,12 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 
     @Override
     public List<ProcessInstanceBO> getProcessListByUserId(String piStarter) {
-        List<ProcessInstanceBO> wfProcessInstanceBOList = new ArrayList<>();
+        List<ProcessInstanceBO> processInstanceBOList = new ArrayList<>();
         List<ProcessInstanceDO> processInstanceDOList = processInstanceRepository.findAllByPiStarter(piStarter);
         for(ProcessInstanceDO processInstanceDO : processInstanceDOList){
-            wfProcessInstanceBOList.add(ProcessInstanceConvert.INSTANCE.convertDOToBO(processInstanceDO));
+            processInstanceBOList.add(ProcessInstanceConvert.INSTANCE.convertDOToBO(processInstanceDO));
         }
-        return wfProcessInstanceBOList;
+        return processInstanceBOList;
     }
 
     private void sendScheduleRequestMessage(ProcessInstanceMessage wfProcessInstanceMessage) {

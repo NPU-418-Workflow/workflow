@@ -7,11 +7,13 @@ import me.danght.workflow.form.dao.ProcessParamsRelationRepository;
 import me.danght.workflow.form.dataobject.ProcessParamsRelationDO;
 import org.apache.dubbo.config.annotation.DubboService;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @DubboService(interfaceClass = ProcessParamsRelationService.class)
-@Singleton
+@ApplicationScoped
+@ActivateRequestContext
 public class ProcessParamsRelationServiceImpl implements ProcessParamsRelationService {
 
     @Inject

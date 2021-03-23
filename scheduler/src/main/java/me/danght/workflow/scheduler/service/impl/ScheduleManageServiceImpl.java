@@ -9,11 +9,18 @@ import me.danght.workflow.scheduler.service.ScheduleManageService;
 import me.danght.workflow.scheduler.element.Process;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Date;
 
+/**
+ * 调度管理器服务
+ *
+ * @author wenxiang
+ * @author DangHT
+ */
 @ApplicationScoped
+@ActivateRequestContext
 public class ScheduleManageServiceImpl implements ScheduleManageService {
 
     @Inject

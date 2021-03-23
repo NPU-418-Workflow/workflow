@@ -8,11 +8,18 @@ import me.danght.workflow.scheduler.element.Process;
 import me.danght.workflow.scheduler.service.TokenService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 
+/**
+ * 令牌服务
+ *
+ * @author wenxiang
+ * @author DangHT
+ */
 @ApplicationScoped
+@ActivateRequestContext
 public class TokenServiceImpl implements TokenService {
 
     @Inject

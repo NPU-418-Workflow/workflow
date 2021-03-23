@@ -20,14 +20,21 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 流程定义服务
+ *
+ * @author wenxiang
+ * @author DangHT
+ */
 @DubboService(interfaceClass = ProcessDefinitionService.class)
 @ApplicationScoped
+@ActivateRequestContext
 public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
 
     @Inject

@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_process_definition")
+@Table(name = "process_definition")
 public class ProcessDefinitionDO extends BaseDO {
     private static final long serialVersionUID=1L;
     /**

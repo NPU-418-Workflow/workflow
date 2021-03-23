@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_process_instance")
+@Table(name = "process_instance")
 public class ProcessInstanceDO extends BaseDO {
     private static final long serialVersionUID=1L;
 

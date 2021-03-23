@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_activity_history_instance")
+@Table(name = "activity_history_instance")
 public class ActivityHistoryInstanceDO extends BaseDO {
     private static final long serialVersionUID=1L;
 

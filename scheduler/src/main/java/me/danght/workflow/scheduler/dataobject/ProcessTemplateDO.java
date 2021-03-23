@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_process_template")
+@Table(name = "process_template")
 public class ProcessTemplateDO extends BaseDO {
     private static final long serialVersionUID=1L;
 

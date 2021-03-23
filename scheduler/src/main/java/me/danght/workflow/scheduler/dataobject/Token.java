@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_token")
+@Table(name = "token")
 public class Token extends BaseDO {
 
     protected Date endTime;

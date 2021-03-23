@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_activtity_instance")
+@Table(name = "activity_instance")
 public class ActivityInstanceDO extends BaseDO {
     private static final long serialVersionUID=1L;
 

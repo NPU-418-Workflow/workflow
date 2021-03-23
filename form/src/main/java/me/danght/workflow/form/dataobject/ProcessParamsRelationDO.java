@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_process_params_relation")
+@Table(name = "process_params_relation")
 public class ProcessParamsRelationDO extends BaseDO {
     private static final long serialVersionUID=1L;
 

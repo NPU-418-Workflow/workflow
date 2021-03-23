@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "leave_info")
+@Table(name = "leave")
 public class LeaveInfoDO implements Serializable {
     private static final long serialVersionUID=1L;
     /**

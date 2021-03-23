@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "group_info")
+@Table(name = "group")
 public class GroupInfoDO implements Serializable {
     private static final long serialVersionUID=1L;
     /**

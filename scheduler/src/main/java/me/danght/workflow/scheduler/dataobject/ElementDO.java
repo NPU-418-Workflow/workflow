@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_element")
+@Table(name = "element")
 public class ElementDO extends BaseDO {
     private static final long serialVersionUID=1L;
 

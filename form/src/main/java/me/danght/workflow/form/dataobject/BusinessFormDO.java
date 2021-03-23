@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_business_form")
+@Table(name = "business_form")
 public class BusinessFormDO extends BaseDO {
     private static final long serialVersionUID=1L;
 

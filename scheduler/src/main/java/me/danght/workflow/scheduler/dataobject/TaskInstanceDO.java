@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_task_instance")
+@Table(name = "task_instance")
 public class TaskInstanceDO extends BaseDO {
     private static final long serialVersionUID=1L;
     /**

@@ -20,7 +20,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "wf_process_history_instance")
+@Table(name = "process_history_instance")
 public class ProcessHistoryInstanceDO extends BaseDO {
     private static final long serialVersionUID=1L;
 

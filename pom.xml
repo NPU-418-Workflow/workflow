@@ -7,10 +7,11 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
+    <module>extensions/quarkus-dubbo-rpc</module>
+    <module>common</module>
     <module>scheduler</module>
     <module>form</module>
     <module>app</module>
-    <module>common</module>
   </modules>
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>

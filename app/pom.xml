@@ -46,6 +46,10 @@
       <artifactId>quarkus-spring-data-jpa</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-mysql</artifactId>
+    </dependency>
+    <dependency>
       <groupId>me.danght.workflow</groupId>
       <artifactId>common</artifactId>
       <version>1.0.0-SNAPSHOT</version>
@@ -62,8 +66,9 @@
     </dependency>
     <dependency>
       <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct-jdk8</artifactId>
+      <artifactId>mapstruct-processor</artifactId>
       <version>${mapstruct.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.curator</groupId>

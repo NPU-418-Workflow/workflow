@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "cdi")
 public interface ProcessDefinitionConvert {
     ProcessDefinitionConvert INSTANCE = Mappers.getMapper(ProcessDefinitionConvert.class);
 

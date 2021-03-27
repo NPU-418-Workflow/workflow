@@ -14,12 +14,9 @@ public class UserInfoDTO implements Serializable {
 
     private String uiName;
 
-    //租户id
     private String tenantId;
 
-    //角色
     private String giId;
 
-    //人员编号
     private String uiNo;
 }

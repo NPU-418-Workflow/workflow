@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "cdi")
 public interface BusinessFormConvert {
     BusinessFormConvert INSTANCE = Mappers.getMapper(BusinessFormConvert.class);
 

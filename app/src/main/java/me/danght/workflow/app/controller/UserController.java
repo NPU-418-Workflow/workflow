@@ -83,7 +83,7 @@ public class UserController {
         return userInfoService.validateUser(uiName);
     }
 
-    @GET
+    @POST
     @Path("addLeave")
     public String addLeave(
             @QueryParam("uiId") String uiId,

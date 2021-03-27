@@ -260,12 +260,12 @@ CREATE TABLE `process_history_instance`  (
   `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pi_status` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '当前记录动作',
   `pi_starter` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pi_businesskey` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pi_business_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `create_time` timestamp(0) NULL DEFAULT NULL,
   `update_time` timestamp(0) NULL DEFAULT NULL,
   `pi_create_time` timestamp(0) NULL DEFAULT NULL,
   `pi_update_time` timestamp(0) NULL DEFAULT NULL,
-  `pi_endtime` timestamp(0) NULL DEFAULT NULL,
+  `pi_end_time` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -290,8 +290,8 @@ CREATE TABLE `process_instance`  (
   `pi_starter` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程发起人(具体用户ID)',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '流程创建时间',
   `update_time` timestamp(0) NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '流程状态更新时间',
-  `endtime` timestamp(0) NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '流程结束时间',
-  `pi_businesskey` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程关联的业务数据主键',
+  `end_time` timestamp(0) NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '流程结束时间',
+  `pi_business_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程关联的业务数据主键',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -446,7 +446,7 @@ CREATE TABLE `task_history_instance`  (
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '时间戳',
   `ti_create_time` timestamp(0) NULL DEFAULT NULL COMMENT '运行时任务开始时间',
   `ti_update_time` timestamp(0) NULL DEFAULT NULL COMMENT '运行时任务状态更新时间',
-  `ti_endtime` timestamp(0) NULL DEFAULT NULL COMMENT '运行时任务结束时间',
+  `ti_end_time` timestamp(0) NULL DEFAULT NULL COMMENT '运行时任务结束时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -511,11 +511,11 @@ CREATE TABLE `task_instance`  (
   `ai_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属活动实例标识',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '任务开始时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '任务状态更新时间',
-  `endtime` timestamp(0) NULL DEFAULT '0000-00-00 00:00:00' COMMENT '任务结束时间',
+  `end_time` timestamp(0) NULL DEFAULT '0000-00-00 00:00:00' COMMENT '任务结束时间',
   `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pi_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `ti_assigner_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `usertask_no` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `user_task_no` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -535,7 +535,7 @@ CREATE TABLE `token`  (
   `parent_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '父token主键',
   `create_time` timestamp(0) NULL DEFAULT NULL,
   `update_time` timestamp(0) NULL DEFAULT NULL,
-  `endtime` timestamp(0) NULL DEFAULT NULL,
+  `end_time` timestamp(0) NULL DEFAULT NULL,
   `child_num` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;

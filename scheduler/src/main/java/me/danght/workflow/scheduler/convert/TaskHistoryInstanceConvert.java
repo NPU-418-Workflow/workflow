@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "cdi")
 public interface TaskHistoryInstanceConvert {
     TaskHistoryInstanceConvert INSTANCE = Mappers.getMapper(TaskHistoryInstanceConvert.class);
     @Mappings({})

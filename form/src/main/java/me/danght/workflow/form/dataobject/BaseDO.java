@@ -1,5 +1,8 @@
 package me.danght.workflow.form.dataobject;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -15,6 +18,8 @@ public class BaseDO implements Serializable {
      * 主键
      */
     @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     protected String id;
 
     /**

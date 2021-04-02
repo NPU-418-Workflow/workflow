@@ -40,6 +40,7 @@ public class UserController {
 
     @POST
     @Path("completeApproval")
+    @Consumes(MediaType.APPLICATION_JSON)
     public String completeApproval(
             @QueryParam("pdId") String pdId,
             @QueryParam("tiId") String tiId,
@@ -77,14 +78,16 @@ public class UserController {
         return "1";
     }
 
-    @GET
+    @POST
     @Path("loginValidate")
+    @Consumes(MediaType.APPLICATION_JSON)
     public UserInfoDTO loginValidate(@QueryParam("uiName") String uiName) {
         return userInfoService.validateUser(uiName);
     }
 
     @POST
     @Path("addLeave")
+    @Consumes(MediaType.APPLICATION_JSON)
     public String addLeave(
             @QueryParam("uiId") String uiId,
             @QueryParam("durations") String durations,
@@ -102,8 +105,9 @@ public class UserController {
         return "1";
     }
 
-    @GET
+    @POST
     @Path("personinfo")
+    @Consumes(MediaType.APPLICATION_JSON)
     public String personinfo(
             @QueryParam("pdId") String pdId,
             @QueryParam("tiId") String tiId,
@@ -115,8 +119,9 @@ public class UserController {
         return "1";
     }
 
-    @GET
+    @POST
     @Path("completedRead")
+    @Consumes(MediaType.APPLICATION_JSON)
     public String completedRead(
             @QueryParam("pdId") String pdId,
             @QueryParam("tiId") String tiId,

@@ -16,6 +16,7 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,7 @@ import java.util.List;
  */
 @DubboService(interfaceClass = ProcessInstanceService.class)
 @ApplicationScoped
+@ActivateRequestContext
 public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 
     @Inject

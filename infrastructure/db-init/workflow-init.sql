@@ -23,21 +23,21 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `activity_history_instance`;
 CREATE TABLE `activity_history_instance`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '历史记录主键',
-  `act_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '历史记录主键',
+  `act_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `ai_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行时记录名称',
   `ai_assigner_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行时执行人类型',
   `ai_assigner_id` varchar(800) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行时执行人标识',
-  `bf_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '挂接业务表单主键',
+  `bf_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '挂接业务表单主键',
   `ai_status` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行时记录状态',
   `ai_create_time` timestamp(0) NULL DEFAULT NULL COMMENT '活动开始时间',
   `ai_update_time` timestamp(0) NULL DEFAULT NULL COMMENT '活动更新时间',
-  `usertask_no` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'xml活动编号',
+  `usertask_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'xml活动编号',
   `ai_category` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动类型(会签、可回退、普通等等)',
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '时间戳',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '时间戳',
-  `pi_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属流程实例主键',
-  `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义id',
+  `pi_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属流程实例主键',
+  `pd_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义id',
   `active_ti_num` int(11) NULL DEFAULT NULL COMMENT '当前活动未完成实例个数',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
@@ -129,18 +129,18 @@ INSERT INTO `activity_history_instance` VALUES ('1217701248001019905', '12177009
 -- ----------------------------
 DROP TABLE IF EXISTS `activity_instance`;
 CREATE TABLE `activity_instance`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `ai_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动名称（当前环节业务描述）',
   `ai_status` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动状态(0运行中1已完成)',
   `ai_assigner_id` varchar(800) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动参与者，可以是外键',
   `ai_assigner_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动参与者种类（0个人1职位）',
-  `bf_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动关联表单外键',
+  `bf_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动关联表单外键',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '活动开启时间',
   `update_time` timestamp(0) NULL DEFAULT '0000-00-00 00:00:00' COMMENT '参与者处理时间',
-  `usertask_no` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'xml活动编号',
+  `usertask_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'xml活动编号',
   `ai_category` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动类型(会签、可回退、普通等等)',
-  `pi_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属流程实例标识，外键',
-  `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义id',
+  `pi_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属流程实例标识，外键',
+  `pd_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义id',
   `active_ti_num` int(11) NULL DEFAULT NULL COMMENT '当前活动未完成实例个数',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
@@ -154,7 +154,7 @@ CREATE TABLE `activity_instance`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `business_form`;
 CREATE TABLE `business_form`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
   `form_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表单名称（中文）',
   `form_url` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表单访问路径',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
@@ -175,9 +175,9 @@ INSERT INTO `business_form` VALUES ('4', '请假即席信息提交表单', '/per
 -- ----------------------------
 DROP TABLE IF EXISTS `element`;
 CREATE TABLE `element`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '无意义主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '无意义主键',
   `element_no` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '元素编号',
-  `element_process_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '元素所属流程主键',
+  `element_process_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '元素所属流程主键',
   `token_number` int(11) NULL DEFAULT NULL COMMENT '元素实际发放令牌数量',
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '流程元素记录创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '流程元素记录更新时间',
@@ -192,11 +192,11 @@ CREATE TABLE `element`  (
 -- ----------------------------
 -- Table structure for group
 -- ----------------------------
-DROP TABLE IF EXISTS `group`;
-CREATE TABLE `group`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+DROP TABLE IF EXISTS `group_info`;
+CREATE TABLE `group_info`  (
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `gi_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '职位名称',
-  `tenant_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '租户id',
+  `tenant_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '租户id',
   `gi_no` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '编号',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
@@ -204,17 +204,17 @@ CREATE TABLE `group`  (
 -- ----------------------------
 -- Records of group
 -- ----------------------------
-INSERT INTO `group` VALUES ('1', '普通员工组', '1', '01');
-INSERT INTO `group` VALUES ('2', '经理组', '1', '02');
-INSERT INTO `group` VALUES ('3', '总经理组', '1', '03');
+INSERT INTO `group_info` VALUES ('1', '普通员工组', '1', '01');
+INSERT INTO `group_info` VALUES ('2', '经理组', '1', '02');
+INSERT INTO `group_info` VALUES ('3', '总经理组', '1', '03');
 
 -- ----------------------------
 -- Table structure for leave
 -- ----------------------------
-DROP TABLE IF EXISTS `leave`;
-CREATE TABLE `leave`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `ui_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+DROP TABLE IF EXISTS `leave_info`;
+CREATE TABLE `leave_info`  (
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `ui_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `durations` int(11) NULL DEFAULT NULL COMMENT '时长',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
@@ -222,23 +222,23 @@ CREATE TABLE `leave`  (
 -- ----------------------------
 -- Records of leave
 -- ----------------------------
-INSERT INTO `leave` VALUES ('1217634886159372289', '1', 5);
-INSERT INTO `leave` VALUES ('1217692491263168513', '1', 5);
-INSERT INTO `leave` VALUES ('1217694274639286274', '1', 5);
-INSERT INTO `leave` VALUES ('1217695262485958657', '5', 5);
-INSERT INTO `leave` VALUES ('1217698872326279170', '1', 5);
+INSERT INTO `leave_info` VALUES ('1217634886159372289', '1', 5);
+INSERT INTO `leave_info` VALUES ('1217692491263168513', '1', 5);
+INSERT INTO `leave_info` VALUES ('1217694274639286274', '1', 5);
+INSERT INTO `leave_info` VALUES ('1217695262485958657', '5', 5);
+INSERT INTO `leave_info` VALUES ('1217698872326279170', '1', 5);
 
 -- ----------------------------
 -- Table structure for process_definition
 -- ----------------------------
 DROP TABLE IF EXISTS `process_definition`;
 CREATE TABLE `process_definition`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流程定义主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流程定义主键',
   `pd_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义名称(中文，从xml中抽取)',
-  `pd_no` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对应的流程资源文件no，即唯一标识，由画图软件自动生成，从xml中抽取',
+  `pd_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对应的流程资源文件no，即唯一标识，由画图软件自动生成，从xml中抽取',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '流程定义时间',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '流程定义更新时间',
-  `pt_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程模板主键',
+  `pt_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程模板主键',
   `start_form` varchar(800) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '开始流程时挂接的表单地址',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
@@ -254,13 +254,13 @@ INSERT INTO `process_definition` VALUES ('1217633983259922433', '请假审批', 
 -- ----------------------------
 DROP TABLE IF EXISTS `process_history_instance`;
 CREATE TABLE `process_history_instance`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `pi_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `pi_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pi_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pd_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pi_status` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '当前记录动作',
   `pi_starter` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pi_business_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pi_business_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `create_time` timestamp(0) NULL DEFAULT NULL,
   `update_time` timestamp(0) NULL DEFAULT NULL,
   `pi_create_time` timestamp(0) NULL DEFAULT NULL,
@@ -283,15 +283,15 @@ INSERT INTO `process_history_instance` VALUES ('1217701248068128770', '121769887
 -- ----------------------------
 DROP TABLE IF EXISTS `process_instance`;
 CREATE TABLE `process_instance`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流程实例主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流程实例主键',
   `pi_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程实例名称(自动拼接用户名+模板名称)',
-  `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义标识(外键)',
+  `pd_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义标识(外键)',
   `pi_status` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程执行状态0未开启1运行中2已完成',
-  `pi_starter` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程发起人(具体用户ID)',
+  `pi_starter` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程发起人(具体用户ID)',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '流程创建时间',
   `update_time` timestamp(0) NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '流程状态更新时间',
   `end_time` timestamp(0) NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '流程结束时间',
-  `pi_business_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程关联的业务数据主键',
+  `pi_business_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程关联的业务数据主键',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -305,17 +305,17 @@ CREATE TABLE `process_instance`  (
 DROP TABLE IF EXISTS `process_params_record`;
 CREATE TABLE `process_params_record`  (
   `pp_record_value` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程参数对应的一条记录值，审批任务的值默认为0/1',
-  `pp_relation_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属流程参数关系的id',
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
-  `ti_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '参数所属任务实例标志(数据库主键)(任务级参数)',
-  `ai_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '参数所属活动实例标识(数据库主键)(活动级参数)',
-  `pi_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '参数所属流程实例标识(数据库主键)(流程级参数)',
+  `pp_relation_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属流程参数关系的id',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `ti_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '参数所属任务实例标志(数据库主键)(任务级参数)',
+  `ai_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '参数所属活动实例标识(数据库主键)(活动级参数)',
+  `pi_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '参数所属流程实例标识(数据库主键)(流程级参数)',
   `status` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '该参数记录状态0有效1无效，主要是针对驳回后产生新的参数记录',
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '流程参数记录创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '流程参数记录更新时间',
   `pp_record_level` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标识当前参数级别',
-  `engine_pp_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pp_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `engine_pp_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pp_type` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -385,13 +385,13 @@ INSERT INTO `process_params_record` VALUES ('1', NULL, '1217701247984242690', NU
 -- ----------------------------
 DROP TABLE IF EXISTS `process_params_relation`;
 CREATE TABLE `process_params_relation`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
   `pp_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '画流程人员指定的必填项名称',
   `pp_level` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '该参数为流程参数01、活动参数02、任务参数03(备用)',
-  `pp_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '数据类型',
-  `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对应的流程id',
-  `task_no` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '与所属流程的活动(环节)相关联，但并不是关联的表中的id，而是流程描述xml中的id',
-  `engine_pp_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程引擎中读取该参数时使用的名称(备用)',
+  `pp_type` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '数据类型',
+  `pd_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对应的流程id',
+  `task_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '与所属流程的活动(环节)相关联，但并不是关联的表中的id，而是流程描述xml中的id',
+  `engine_pp_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程引擎中读取该参数时使用的名称(备用)',
   `create_time` timestamp(0) NULL DEFAULT NULL,
   `update_time` timestamp(0) NULL DEFAULT NULL,
   `business_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '业务表单参数名称',
@@ -412,7 +412,7 @@ INSERT INTO `process_params_relation` VALUES ('1217633985503887361', 'durations'
 -- ----------------------------
 DROP TABLE IF EXISTS `process_template`;
 CREATE TABLE `process_template`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '流程描述文件主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '流程描述文件主键',
   `pt_content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '流程描述文件内容',
   `pt_filename` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程描述文件名称',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '模板资源上传时间',
@@ -436,13 +436,13 @@ INSERT INTO `process_template` VALUES ('6', '<definitions no=\"myDefinition\" na
 -- ----------------------------
 DROP TABLE IF EXISTS `task_history_instance`;
 CREATE TABLE `task_history_instance`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '历史记录主键',
-  `ti_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行时的任务实例主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '历史记录主键',
+  `ti_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行时的任务实例主键',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '时间戳',
-  `ai_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对应活动运行时主键',
+  `ai_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对应活动运行时主键',
   `ti_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务名称',
   `ti_status` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务状态0正在运行1已完成',
-  `bf_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务关联表单外键',
+  `bf_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务关联表单外键',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '时间戳',
   `ti_create_time` timestamp(0) NULL DEFAULT NULL COMMENT '运行时任务开始时间',
   `ti_update_time` timestamp(0) NULL DEFAULT NULL COMMENT '运行时任务状态更新时间',
@@ -504,16 +504,16 @@ INSERT INTO `task_history_instance` VALUES ('1217701247959076865', '121770118683
 DROP TABLE IF EXISTS `task_instance`;
 CREATE TABLE `task_instance`  (
   `ti_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务名称',
-  `ti_assigner` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务参与者/执行人',
+  `ti_assigner` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务参与者/执行人',
   `ti_status` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务状态01正在运行02已完成03该次活动已结束04已移到历史库',
-  `bf_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务关联表单外键',
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
-  `ai_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属活动实例标识',
+  `bf_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务关联表单外键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `ai_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属活动实例标识',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '任务开始时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '任务状态更新时间',
   `end_time` timestamp(0) NULL DEFAULT '0000-00-00 00:00:00' COMMENT '任务结束时间',
-  `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pi_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pd_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pi_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `ti_assigner_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `user_task_no` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
@@ -528,11 +528,11 @@ CREATE TABLE `task_instance`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '无意义主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '无意义主键',
   `element_no` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '持有令牌元素编号',
-  `pd_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义主键',
-  `pi_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程实例主键',
-  `parent_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '父token主键',
+  `pd_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程定义主键',
+  `pi_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程实例主键',
+  `parent_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '父token主键',
   `create_time` timestamp(0) NULL DEFAULT NULL,
   `update_time` timestamp(0) NULL DEFAULT NULL,
   `end_time` timestamp(0) NULL DEFAULT NULL,
@@ -549,10 +549,10 @@ CREATE TABLE `token`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
   `ui_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
-  `tenant_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '租户id',
-  `gi_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色',
+  `tenant_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '租户id',
+  `gi_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色',
   `ui_no` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '编号',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;

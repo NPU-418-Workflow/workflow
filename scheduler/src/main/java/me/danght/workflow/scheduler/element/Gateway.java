@@ -1,12 +1,16 @@
 package me.danght.workflow.scheduler.element;
 
+import io.quarkus.redis.client.RedisClient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import me.danght.workflow.common.api.schduler.ProcessInstanceService;
+import me.danght.workflow.scheduler.dao.TaskInstanceRepository;
 import me.danght.workflow.scheduler.dao.TokenRepository;
 import me.danght.workflow.scheduler.dataobject.Token;
+import me.danght.workflow.scheduler.service.ActivityInstanceService;
+import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 
 /**
@@ -27,19 +31,28 @@ public abstract class Gateway extends Node {
      */
     protected String name;
 
-    @Inject
-    TokenRepository tokenRepository;
-
     @Override
-    public void execute(Token token){
+    public void execute(Token token,
+                        ProcessParamsRecordService processParamsRecordService,
+                        TokenRepository tokenRepository,
+                        TaskInstanceRepository taskInstanceRepository,
+                        ActivityInstanceService activityInstanceService,
+                        ProcessInstanceService processInstanceService,
+                        RedisClient redisClient){
         if(outgoingFlows.size() > 1){
-            fork(token);
+            fork(token, processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);
         }else {
-            merge(token);
+            merge(token, processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);
         }
     }
 
-    public void fork(Token token){
+    public void fork(Token token,
+                     ProcessParamsRecordService processParamsRecordService,
+                     TokenRepository tokenRepository,
+                     TaskInstanceRepository taskInstanceRepository,
+                     ActivityInstanceService activityInstanceService,
+                     ProcessInstanceService processInstanceService,
+                     RedisClient redisClient){
         token.setChildNum(outgoingFlows.size());
         tokenRepository.save(token);
         for(SequenceFlow sequenceFlow : outgoingFlows){
@@ -53,11 +66,17 @@ public abstract class Gateway extends Node {
             //主要是为了拿Id
             tokenRepository.save(childToken);
             token.getChildren().add(childToken);
-            leave(childToken,sequenceFlow);
+            leave(childToken, sequenceFlow, processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);
         }
     }
 
-    public void merge(Token token){
+    public void merge(Token token,
+                      ProcessParamsRecordService processParamsRecordService,
+                      TokenRepository tokenRepository,
+                      TaskInstanceRepository taskInstanceRepository,
+                      ActivityInstanceService activityInstanceService,
+                      ProcessInstanceService processInstanceService,
+                      RedisClient redisClient){
         //判断当前token是不是父token的最后一个子token，如果是就把爹弄来，不是就删了自个了事
         tokenRepository.deleteById(token.getId());
         Token parentToken = tokenRepository.findById(token.getParentId()).orElse(null);
@@ -68,7 +87,7 @@ public abstract class Gateway extends Node {
             parentToken.setCurrentNode(this);
             parentToken.setElementNo(this.getNo());
             parentToken.setChildren(new ArrayList<>());
-            leave(parentToken);
+            leave(parentToken, processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);
         }
     }
 }

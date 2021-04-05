@@ -1,9 +1,15 @@
 package me.danght.workflow.scheduler.dataobject;
 
+import io.quarkus.redis.client.RedisClient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import me.danght.workflow.common.api.schduler.ProcessInstanceService;
+import me.danght.workflow.scheduler.dao.TaskInstanceRepository;
+import me.danght.workflow.scheduler.dao.TokenRepository;
 import me.danght.workflow.scheduler.element.Node;
+import me.danght.workflow.scheduler.service.ActivityInstanceService;
+import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -64,10 +70,15 @@ public class Token extends BaseDO {
     /**
      * 非UserTask节点不会使用signal信号驱动，是通过execute自动转移，而也只有UserTask节点需要调用getDefaultOutgoings()方法
      */
-    public void signal(){
+    public void signal(ProcessParamsRecordService processParamsRecordService,
+                       TokenRepository tokenRepository,
+                       TaskInstanceRepository taskInstanceRepository,
+                       ActivityInstanceService activityInstanceService,
+                       ProcessInstanceService processInstanceService,
+                       RedisClient redisClient){
         if(currentNode == null || currentNode.getDefaultOutgoing() == null)
             return;
-        currentNode.leave(this);
+        currentNode.leave(this, processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);
     }
 
 

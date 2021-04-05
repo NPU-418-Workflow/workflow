@@ -55,5 +55,5 @@ public class Process extends BaseElement implements Serializable {
      */
     protected List<Gateway> gatewayList;
 
-    protected Event startEvent;
+    protected StartEvent startEvent;
 }

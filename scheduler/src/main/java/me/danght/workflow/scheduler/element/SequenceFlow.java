@@ -1,15 +1,19 @@
 package me.danght.workflow.scheduler.element;
 
+import io.quarkus.redis.client.RedisClient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import me.danght.workflow.common.api.schduler.ProcessInstanceService;
 import me.danght.workflow.common.constant.ParamType;
 import me.danght.workflow.scheduler.bo.ProcessParamsRecordBO;
+import me.danght.workflow.scheduler.dao.TaskInstanceRepository;
+import me.danght.workflow.scheduler.dao.TokenRepository;
 import me.danght.workflow.scheduler.dataobject.Token;
+import me.danght.workflow.scheduler.service.ActivityInstanceService;
 import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 import me.danght.workflow.scheduler.tools.JexlUtil;
 
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -54,15 +58,18 @@ public class SequenceFlow extends BaseElement implements Serializable {
     protected BaseElement to = null;
     protected List<DataParam> paramList;
 
-    @Inject
-    ProcessParamsRecordService processParamsRecordService;
-
-    public void take(Token token){
+    public void take(Token token,
+                     ProcessParamsRecordService processParamsRecordService,
+                     TokenRepository tokenRepository,
+                     TaskInstanceRepository taskInstanceRepository,
+                     ActivityInstanceService activityInstanceService,
+                     ProcessInstanceService processInstanceService,
+                     RedisClient redisClient){
         //如sf不带有条件表达式，则无脑往目标走
         if(conditionExpression == null){
             //在连接线上没有令牌住所，佩特里网transition不持有令牌
             token.setCurrentNode(null);
-            ((Node)to).enter(token);
+            ((Node)to).enter(token, processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);
         } else if (conditionExpression.length() > 0){
             //TODO 这块其实用不上，因为无论是排他网关还是选择网关都会提前判定执行那些有向弧进行变迁
             Map<String,Object> requiredData = new HashMap<>();
@@ -96,7 +103,7 @@ public class SequenceFlow extends BaseElement implements Serializable {
             if(JexlUtil.conditionIsMacth(conditionExpression,requiredData)){
                 token.setCurrentNode(null);
                 token.setElementNo(no);
-                ((Node)to).enter(token);
+                ((Node)to).enter(token, processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);
             }
         }
     }

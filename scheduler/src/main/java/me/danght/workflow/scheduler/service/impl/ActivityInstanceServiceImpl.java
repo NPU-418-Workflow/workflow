@@ -75,7 +75,7 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
         for(BaseElement baseElement : userTaskList){
             UserTask userTask = (UserTask)baseElement;
             List<ActivityInstanceDO> activityInstanceDOList = activityInstanceRepository.findAllByPiIdAndUserTaskNo(piId, userTask.getNo());
-            ActivityInstanceDO activityInstanceDO = activityInstanceDOList.get(0);
+            ActivityInstanceDO activityInstanceDO;
             List<String> assList = new ArrayList<>();
             if(userTask.getAssignees() != null && userTask.getAssignees().size() > 0) {
                 assList.addAll(userTask.getAssignees());
@@ -88,7 +88,8 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
                 Collections.addAll(assList, dynamicAssignees);
             }
             //即席内容处理结束
-            if(activityInstanceDO != null){
+            if(activityInstanceDOList.size() > 0){
+                activityInstanceDO = activityInstanceDOList.get(0);
                 activityInstanceDO.setAiAssignerId(JSON.toJSONString(assList));
                 activityInstanceDO.setActiveTiNum(assList.size());
                 activityInstanceDO.setAiStatus(ActivityInstanceState.TASK_ACTIVITY_STATE_RUNNING);
@@ -128,8 +129,9 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
     @Override
     public ActivityInstanceBO addStartEventActivity(StartEvent startEvent, String piId, String pdId, String piStarter) {
         List<ActivityInstanceDO> activityInstanceDOList = activityInstanceRepository.findAllByPiIdAndUserTaskNo(piId, startEvent.getNo());
-        ActivityInstanceDO activityInstanceDO = activityInstanceDOList.get(0);
-        if(activityInstanceDO != null){
+        ActivityInstanceDO activityInstanceDO;
+        if(activityInstanceDOList.size() > 0){
+            activityInstanceDO = activityInstanceDOList.get(0);
             activityInstanceDO.setAiAssignerId(JSON.toJSONString(piStarter));
             activityInstanceDO.setActiveTiNum(1);
             activityInstanceDO.setAiStatus(ActivityInstanceState.TASK_ACTIVITY_STATE_RUNNING);

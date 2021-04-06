@@ -1,0 +1,44 @@
+<definitions no="myDefinition" name="请假审批">
+    <process no="myProcess" name="流程1">
+      <startEvent no="startevent1" name="请假申请环节" paramList="startevent1,durations,03,S001" pageKey="1"></startEvent>
+      <userTask no="ut001" name="动态指定抄送目标环节（演示即席）" assignee ="1"  paramList="ut001,dynamicassignee01,02,E004" pageKey="4" taskType="02" assigneeType="0" ></userTask>
+      <userTask no="ut002" name="指定成员抄送审阅" dynamicAssignee = "ut001,dynamicassignee01,02,E004" dynamicAssigneeType="0" pageKey="2" taskType="01"></userTask>
+      <parallelGateway no="pgw001" name="Parallel Gateway"></parallelGateway>
+      <userTask no="ut003" name="经理级审批环节（任意1个）" paramList="ut003,judge,01,E001" assignee ="2" pageKey="3" taskType="01" assigneeType="1"></userTask>
+      <userTask no="ut004" name="hx,yy会签审批环节" paramList="ut004,pass,03,E002" assignee ="2,3" pageKey="3" taskType="02" assigneeType="0"></userTask>
+      <parallelGateway no="pgw002" name="Parallel Gateway"></parallelGateway>
+      <exclusiveGateway no="egw001" name="Exclusive Gateway"></exclusiveGateway>
+      <userTask no="ut005" name="抄送给张三环节" assignee ="4" pageKey="2" taskType="01" assigneeType="0"></userTask>
+      <userTask no="ut006" name="抄送任务环节" assignee ="5" pageKey="2" taskType="01" assigneeType="0"></userTask>
+      <userTask no="ut007" name="李总审批环节" paramList="ut007,ok,01,E003" assignee ="5" pageKey="3" taskType="01" assigneeType="0"></userTask>
+      <userTask no="ut008" name="抄送任务环节" assignee ="5" pageKey="2" taskType="01" assigneeType="0"></userTask>
+      <exclusiveGateway no="egw002" name="Exclusive Gateway"></exclusiveGateway>
+      <endEvent no="endevent1" name="End"></endEvent>
+      <endEvent no="endevent2" name="End"></endEvent>
+      <sequenceFlow no="fw001"  sourceRef="startevent1" targetRef="ut001"></sequenceFlow>
+      <sequenceFlow no="fw002"  sourceRef="ut001" targetRef="ut002"></sequenceFlow>
+      <sequenceFlow no="fw003"  sourceRef="ut002" targetRef="pgw001"></sequenceFlow>
+      <sequenceFlow no="fw004"  sourceRef="pgw001" targetRef="ut003"></sequenceFlow>
+      <sequenceFlow no="fw005"  sourceRef="pgw001" targetRef="ut004"></sequenceFlow>
+      <sequenceFlow no="fw006"  sourceRef="ut004" targetRef="pgw002"></sequenceFlow>
+      <sequenceFlow no="fw007"  sourceRef="ut003" targetRef="pgw002"></sequenceFlow>
+      <sequenceFlow no="fw008"  sourceRef="pgw002" targetRef="egw001"></sequenceFlow>
+      <sequenceFlow no="fw009"  sourceRef="egw001" targetRef="ut005">
+          <conditionExpression paramList="ut003,judge,01,E001;ut004,pass,03,E002;startevent1,durations,03,S001" ><![CDATA[ S001 > 2 && E002 > 1 && E001 == true]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow no="fw010"  sourceRef="egw001" targetRef="ut006">
+          <conditionExpression paramList="startevent1,durations,03,S001;ut004,pass,03,E002"><![CDATA[ S001 < 3 && E002 < 2]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow no="fw011"  sourceRef="ut005" targetRef="ut007"></sequenceFlow>
+      <sequenceFlow no="fw012"  sourceRef="ut007" targetRef="egw002"></sequenceFlow>
+      <sequenceFlow no="fw013"  sourceRef="egw002" targetRef="endevent1">
+          <conditionExpression paramList="ut007,ok,01,E003" ><![CDATA[ E003==true ]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow no="fw016"  sourceRef="egw002" targetRef="ut005">
+          <conditionExpression paramList="ut007,ok,01,E003" ><![CDATA[E003==false]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow no="fw014"  sourceRef="ut006" targetRef="ut008"></sequenceFlow>
+      <sequenceFlow no="fw015"  sourceRef="ut008" targetRef="endevent2"></sequenceFlow>
+    </process>
+  
+  </definitions>

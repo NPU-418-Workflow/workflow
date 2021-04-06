@@ -1,6 +1,7 @@
 package me.danght.workflow.scheduler.mq;
 
 import io.quarkus.redis.client.RedisClient;
+import io.smallrye.reactive.messaging.annotations.Blocking;
 import me.danght.workflow.common.api.schduler.ProcessDefinitionService;
 import me.danght.workflow.common.api.schduler.ProcessInstanceService;
 import me.danght.workflow.common.api.schduler.TaskHistoryInstanceService;
@@ -15,7 +16,12 @@ import me.danght.workflow.scheduler.convert.ActivityInstanceConvert;
 import me.danght.workflow.scheduler.convert.ProcessInstanceConvert;
 import me.danght.workflow.scheduler.convert.TaskHistoryInstanceConvert;
 import me.danght.workflow.scheduler.convert.TaskInstanceConvert;
+import me.danght.workflow.scheduler.dao.ProcessInstanceRepository;
+import me.danght.workflow.scheduler.dao.TaskInstanceRepository;
+import me.danght.workflow.scheduler.dao.TokenRepository;
 import me.danght.workflow.scheduler.dao.redis.BpmnModelCacheDao;
+import me.danght.workflow.scheduler.dataobject.ProcessInstanceDO;
+import me.danght.workflow.scheduler.dataobject.TaskInstanceDO;
 import me.danght.workflow.scheduler.dataobject.Token;
 import me.danght.workflow.scheduler.element.BpmnModel;
 import me.danght.workflow.scheduler.service.ScheduleManageService;
@@ -27,6 +33,7 @@ import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -68,6 +75,15 @@ public class ScheduleRequestConsumer {
     @Inject
     RedisClient redisClient;
 
+    @Inject
+    TaskInstanceRepository taskInstanceRepository;
+
+    @Inject
+    TokenRepository tokenRepository;
+
+    @Inject
+    ProcessInstanceRepository processInstanceRepository;
+
     //@Inject
     //SqlSessionTemplate sqlsession;
 
@@ -75,6 +91,8 @@ public class ScheduleRequestConsumer {
     BpmnModelCacheDao bpmnModelCacheDao;
 
     @Incoming("schedule-request-in")
+    @Blocking
+    @Transactional
     public void receive(ScheduleRequestMessage scheduleRequestMessage) {
         //合并并发活动数据以及判断是否存在关联活动未完成的情况
         //注：通过当前userTask的下一个元素的入度并结合当前处于正在执行状态的活动判断是否都已完成
@@ -101,7 +119,21 @@ public class ScheduleRequestConsumer {
             //no在start任务里面配
             rootToken.setParentId("0");
             rootToken.setElementNo(bpmnModel.getProcess().getStartEvent().getNo());
-            bpmnModel.getProcess().getStartEvent().execute(rootToken);
+            //开始流程,目前的设计是，只有usertask会持久化token到数据库
+            rootToken.setCreateTime(new Date());
+            //这块本没必要入库，但是考虑到如果流程一开始就进入fork的情况，需要parentId，所以先入库拿Id
+            tokenRepository.save(rootToken);
+            ProcessInstanceDO processInstanceDO =  processInstanceRepository.findById(rootToken.getPiId()).orElse(null);
+            if (processInstanceDO != null) {
+                ActivityInstanceBO activityInstanceBO = activityInstanceService
+                        .addStartEventActivity(
+                                bpmnModel.getProcess().getStartEvent(),
+                                rootToken.getPiId(),
+                                rootToken.getPdId(),
+                                processInstanceDO.getPiStarter()
+                        );
+                pushTask(activityInstanceBO, processInstanceDO.getPiStarter());
+            }
             //自动完成第一个任务
             TaskInstanceMessage wfTaskInstanceMessage = new TaskInstanceMessage()
                     .setId(taskInstanceService.getFirstTaskId(processInstanceBO.getId()))
@@ -160,7 +192,25 @@ public class ScheduleRequestConsumer {
         }
         //Token复原，关键在子父关系一整套都要复原
         Token cToken = tokenService.getCurrentToken(activityInstanceBO.getPiId(), activityInstanceBO.getUserTaskNo(), bpmnModel.getProcess());
-        cToken.signal();
+        cToken.signal(processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);
+    }
+
+    public TaskInstanceDO pushTask(ActivityInstanceBO activityInstanceBO, String ass){
+        TaskInstanceDO taskInstanceDO = new TaskInstanceDO()
+                .setTiName(activityInstanceBO.getAiName())
+                .setTiAssigner(ass)
+                .setTiStatus(TaskInstanceState.TASK_INSTANCE_STATE_RUNNING)
+                .setBfId(activityInstanceBO.getBfId())
+                .setAiId(activityInstanceBO.getId())
+                .setPdId(activityInstanceBO.getPdId())
+                .setTiAssignerType(activityInstanceBO.getAiAssignerType())
+                .setPiId(activityInstanceBO.getPiId())
+                .setUserTaskNo(activityInstanceBO.getUserTaskNo());
+        taskInstanceDO.setCreateTime(new Date());
+        taskInstanceDO.setUpdateTime(taskInstanceDO.getCreateTime());
+        taskInstanceRepository.save(taskInstanceDO);
+        redisClient.append(taskInstanceDO.getId(), "1");
+        return taskInstanceDO;
     }
 
 }

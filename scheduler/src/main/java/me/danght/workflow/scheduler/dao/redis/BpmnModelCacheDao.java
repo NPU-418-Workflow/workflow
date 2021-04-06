@@ -7,6 +7,7 @@ import me.danght.workflow.scheduler.element.BpmnModel;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class BpmnModelCacheDao {
@@ -25,6 +26,9 @@ public class BpmnModelCacheDao {
 
     public BpmnModel get(String id) {
         String key = buildKey(id);
+        if (!redisClient.exists(List.of(key)).toBoolean()) {
+            return null;
+        }
         String value = redisClient.get(key).toString();
         BpmnModel bpmnModel = null;
         try {

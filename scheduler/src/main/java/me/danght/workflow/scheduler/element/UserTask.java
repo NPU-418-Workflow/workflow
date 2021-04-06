@@ -6,6 +6,7 @@ import io.quarkus.redis.client.RedisClient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import me.danght.workflow.common.api.schduler.ProcessInstanceService;
 import me.danght.workflow.common.bo.ActivityInstanceBO;
 import me.danght.workflow.common.constant.TaskInstanceState;
 import me.danght.workflow.common.serialization.BaseMapper;
@@ -14,8 +15,8 @@ import me.danght.workflow.scheduler.dao.TaskInstanceRepository;
 import me.danght.workflow.scheduler.dataobject.Token;
 import me.danght.workflow.scheduler.dataobject.TaskInstanceDO;
 import me.danght.workflow.scheduler.service.ActivityInstanceService;
+import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,20 +71,14 @@ public class UserTask extends Node {
 
     protected List<DataParam> paramList;
 
-    @Inject
-    TokenRepository tokenRepository;
-
-    @Inject
-    TaskInstanceRepository taskInstanceRepository;
-
-    @Inject
-    RedisClient redisClient;
-
-    @Inject
-    ActivityInstanceService activityInstanceService;
-
     @Override
-    public void execute(Token token){
+    public void execute(Token token,
+                        ProcessParamsRecordService processParamsRecordService,
+                        TokenRepository tokenRepository,
+                        TaskInstanceRepository taskInstanceRepository,
+                        ActivityInstanceService activityInstanceService,
+                        ProcessInstanceService processInstanceService,
+                        RedisClient redisClient){
         token.setUpdateTime(new Date());
         tokenRepository.save(token);
         List<BaseElement> readyExecuteUserTaskList = new ArrayList<>();
@@ -102,11 +97,15 @@ public class UserTask extends Node {
             e.printStackTrace();
         }
         if (assigners != null) {
-            pushTask(activityInstanceBOList.get(0), assigners);
+            pushTask(activityInstanceBOList.get(0), assigners, taskInstanceRepository, redisClient);
         }
     }
 
-    public void pushTask(ActivityInstanceBO activityInstanceBO, List<String> assigners){
+    public void pushTask(
+            ActivityInstanceBO activityInstanceBO,
+            List<String> assigners,
+            TaskInstanceRepository taskInstanceRepository,
+            RedisClient redisClient){
         for(String assignerId : assigners){
             TaskInstanceDO taskInstanceDO = new TaskInstanceDO()
                     .setTiName(activityInstanceBO.getAiName())

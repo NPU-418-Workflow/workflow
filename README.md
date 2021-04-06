@@ -1,58 +1,42 @@
 # workflow project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+这是由NPU-418工作流研究小组自主研发的基于BPMN的工作流系统。可以驱动BPMN流程模板运转，实现流程自动化:robot:
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+*项目还处于alpha版本，功能有限，有待于进一步的开发*
 
-## Running the application in dev mode
+## 工作目录介绍
 
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
-```
+- app：一个请假流程应用服务
+- common：公共类
+- extensions：一些依赖项目
+- form：用户表单服务
+- infrastructure: 项目运行环境
+- scheduler：核心调度服务
+- template：BPMN流程模板文件
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+## 运行测试方法
 
-## Packaging and running the application
+前提：
+- JDK 11+
+- Maven 3.6+
+- Docker
 
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+步骤：
+1. clone 项目到本地，并打开项目目录
+2. 确保 docker 环境启动，输入`docker-compose -f .\infrastructure\docker-compose.yaml up -d`启动运行环境
+3. 编译打包项目 `mvn clean package`
+4. 分别在 scheduler, form, app 三个目录下运行 `java -jar .\target\quarkus-app\quarkus-run.jar`运行项目
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
+由于目前项目没有前端，推荐使用 [Postman](https://www.postman.com/) 等 API 测试工具进行功能测试
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+项目待完成的工作可以参考[工作流系统开发板](https://github.com/NPU-418-Workflow/workflow/projects/1)
 
-## Creating a native executable
+## 如何参与
+- 如果有问题或发现BUG：直接在[issues](https://github.com/NPU-418-Workflow/workflow/issues)中提出一个新的 issue 就行
+- 如果想贡献代码：
+  - 首先，你需要 fork 一个分支到你自己的 repos 中
+  - 从你的分支中 clone 到本地进行开发
+  - 开发完成后 push 到你的分支
+  - 提交 Pull Request 到 NPU-418-Workflow/workflow
 
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/workflow-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html.
-
-## Related guides
-
-- RESTEasy JAX-RS ([guide](https://quarkus.io/guides/rest-json)): REST endpoint framework implementing JAX-RS and more
-
-## Provided examples
-
-### RESTEasy JAX-RS example
-
-REST is easy peasy with this Hello World RESTEasy resource.
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+*建议参与开发的同学在 IDE 中安装 Alibaba Java Coding Guidelines 插件并根据插件提示保持良好的代码规范。同时在阅读代码时如果发现有代码书写可以改进的地方也可以修改并提交PR*

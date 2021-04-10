@@ -104,7 +104,7 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
         return processInstanceBOList;
     }
 
-    private void sendScheduleRequestMessage(ProcessInstanceMessage wfProcessInstanceMessage) {
-        emitter.send(new ScheduleRequestMessage().setProcessInstanceMessage(wfProcessInstanceMessage));
+    private void sendScheduleRequestMessage(ProcessInstanceMessage processInstanceMessage) {
+        emitter.send(new ScheduleRequestMessage().setProcessInstanceMessage(processInstanceMessage));
     }
 }

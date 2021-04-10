@@ -28,16 +28,16 @@ import java.util.Map;
 public class ClientProcessServiceImpl implements ClientProcessService {
 
     @DubboReference
-    ProcessDefinitionService wfProcessDefinitionService;
+    ProcessDefinitionService processDefinitionService;
 
     @DubboReference
-    ProcessInstanceService wfProcessInstanceService;
+    ProcessInstanceService processInstanceService;
 
     @Inject
     BusinessFormService businessFormService;
 
     @Inject
-    ProcessParamsRelationService wfProcessParamsRelationService;
+    ProcessParamsRelationService processParamsRelationService;
 
     @Inject
     @Channel("schedule-request-out")
@@ -45,42 +45,42 @@ public class ClientProcessServiceImpl implements ClientProcessService {
 
     @Override
     public boolean startProcess(String pdId, String piName, String piStarter, String piBusinessKey, Map<String, ParmObject> requiredData) {
-        ProcessInstanceMessage wfProcessInstanceMessage = new ProcessInstanceMessage();
+        ProcessInstanceMessage processInstanceMessage = new ProcessInstanceMessage();
         Map<String, ParmObject> engineData = new HashMap<>();
         for (Map.Entry<String, ParmObject> entry : requiredData.entrySet()){
             ParmObject parmObject = new ParmObject();
-            ProcessParamsRelationDTO wfProcessParamsRelationDTO = wfProcessParamsRelationService.getEnginePpName(pdId,entry.getKey(),"startevent1");
-            parmObject.setPpType(wfProcessParamsRelationDTO.getPpType());
+            ProcessParamsRelationDTO processParamsRelationDTO = processParamsRelationService.getEnginePpName(pdId,entry.getKey(),"startevent1");
+            parmObject.setPpType(processParamsRelationDTO.getPpType());
             parmObject.setVal(entry.getValue().getVal());
-            engineData.put(wfProcessParamsRelationDTO.getEnginePpName(),parmObject);
+            engineData.put(processParamsRelationDTO.getEnginePpName(),parmObject);
         }
-        wfProcessInstanceMessage.setPdId(pdId)
+        processInstanceMessage.setPdId(pdId)
                 .setPiBusinessKey(piBusinessKey)
                 .setPiName(piName)
                 .setPiStarter(piStarter)
                 .setRequiredData(engineData);
-        sendScheduleRequest(wfProcessInstanceMessage);
+        sendScheduleRequest(processInstanceMessage);
         return true;
     }
 
     @Override
     public List<ProcessDefinitionBO> queryDefinitionList() {
-        List<ProcessDefinitionBO> wfProcessDefinitionBOList = wfProcessDefinitionService.queryDefinitionList();
-        for(ProcessDefinitionBO wfProcessDefinitionBO : wfProcessDefinitionBOList){
-            BusinessFormDTO businessFormDTO = businessFormService.selectById(wfProcessDefinitionBO.getStartForm());
-            wfProcessDefinitionBO.setStartForm(businessFormDTO.getFormUrl());
+        List<ProcessDefinitionBO> processDefinitionBOList = processDefinitionService.queryDefinitionList();
+        for(ProcessDefinitionBO processDefinitionBO : processDefinitionBOList){
+            BusinessFormDTO businessFormDTO = businessFormService.selectById(processDefinitionBO.getStartForm());
+            processDefinitionBO.setStartForm(businessFormDTO.getFormUrl());
         }
-        return wfProcessDefinitionBOList;
+        return processDefinitionBOList;
     }
 
     @Override
     public void changeProcessState(String piId, String state) {
-        wfProcessInstanceService.changeProcessState(piId,state);
+        processInstanceService.changeProcessState(piId,state);
     }
 
     @Override
     public List<ProcessInstanceBO> getProcessListByUserId(String piStarter) {
-        return wfProcessInstanceService.getProcessListByUserId(piStarter);
+        return processInstanceService.getProcessListByUserId(piStarter);
     }
 
     public void sendScheduleRequest(ProcessInstanceMessage processInstanceMessage) {

@@ -27,10 +27,10 @@ import java.util.Map;
 public class ClientTaskServiceImpl implements ClientTaskService {
 
     @Inject
-    ProcessParamsRelationService wfProcessParamsRelationService;
+    ProcessParamsRelationService processParamsRelationService;
 
     @DubboReference
-    TaskInstanceService wfTaskInstanceService;
+    TaskInstanceService taskInstanceService;
 
     @Inject
     BusinessFormService businessFormService;
@@ -42,50 +42,50 @@ public class ClientTaskServiceImpl implements ClientTaskService {
     @Override
     public boolean completeTask(String tiId, String pdId, String taskNo, Map<String, Object> requiredData) {
 
-        TaskInstanceMessage wfTaskInstanceMessage = new TaskInstanceMessage();
-        wfTaskInstanceMessage.setId(tiId);
+        TaskInstanceMessage taskInstanceMessage = new TaskInstanceMessage();
+        taskInstanceMessage.setId(tiId);
 
         Map<String, ParmObject> engineData = new HashMap<>();
         for (Map.Entry<String, Object> entry : requiredData.entrySet()){
             ParmObject parmObject = new ParmObject();
-            ProcessParamsRelationDTO wfProcessParamsRelationDTO = wfProcessParamsRelationService.getEnginePpName(pdId,entry.getKey(),taskNo);
-            parmObject.setPpType(wfProcessParamsRelationDTO.getPpType());
+            ProcessParamsRelationDTO processParamsRelationDTO = processParamsRelationService.getEnginePpName(pdId,entry.getKey(),taskNo);
+            parmObject.setPpType(processParamsRelationDTO.getPpType());
             parmObject.setVal(entry.getValue());
-            engineData.put(wfProcessParamsRelationDTO.getEnginePpName(),parmObject);
+            engineData.put(processParamsRelationDTO.getEnginePpName(),parmObject);
         }
-        wfTaskInstanceMessage.setRequiredData(engineData);
-        sendScheduleRequest(wfTaskInstanceMessage);
+        taskInstanceMessage.setRequiredData(engineData);
+        sendScheduleRequest(taskInstanceMessage);
         return true;
     }
 
     @Override
     public List<TaskInstanceBO> selectUnCompletedTask(String tiAssigner, String tiAssignerType) {
-        List<TaskInstanceBO> wfTaskInstanceBOList =  wfTaskInstanceService.selectUnCompletedTask(tiAssigner,tiAssignerType);
-        for(TaskInstanceBO wfTaskInstanceBO : wfTaskInstanceBOList){
-            BusinessFormDTO businessFormDTO = businessFormService.selectById(wfTaskInstanceBO.getBfId());
-            wfTaskInstanceBO.setBfUrl(businessFormDTO.getFormUrl());
+        List<TaskInstanceBO> taskInstanceBOList =  taskInstanceService.selectUnCompletedTask(tiAssigner,tiAssignerType);
+        for(TaskInstanceBO taskInstanceBO : taskInstanceBOList){
+            BusinessFormDTO businessFormDTO = businessFormService.selectById(taskInstanceBO.getBfId());
+            taskInstanceBO.setBfUrl(businessFormDTO.getFormUrl());
         }
-        return wfTaskInstanceBOList;
+        return taskInstanceBOList;
     }
 
     @Override
     public TaskInstanceDTO obtainTask(String id, String tiAssigner) {
-        TaskInstanceDTO wfTaskInstanceDTO = new TaskInstanceDTO()
+        TaskInstanceDTO taskInstanceDTO = new TaskInstanceDTO()
                 .setId(id)
                 .setTiAssigner(tiAssigner)
                 .setTiAssignerType("0");
-        wfTaskInstanceService.updateById(wfTaskInstanceDTO);
-        return wfTaskInstanceDTO;
+        taskInstanceService.updateById(taskInstanceDTO);
+        return taskInstanceDTO;
     }
 
     @Override
     public List<TaskInstanceBO> selectUnObtainTask(String tiAssigner) {
-        List<TaskInstanceBO> wfTaskInstanceBOList =  wfTaskInstanceService.selectUnObtainedTask(tiAssigner);
-        for(TaskInstanceBO wfTaskInstanceBO : wfTaskInstanceBOList){
-            BusinessFormDTO businessFormDTO = businessFormService.selectById(wfTaskInstanceBO.getBfId());
-            wfTaskInstanceBO.setBfUrl(businessFormDTO.getFormUrl());
+        List<TaskInstanceBO> taskInstanceBOList =  taskInstanceService.selectUnObtainedTask(tiAssigner);
+        for(TaskInstanceBO taskInstanceBO : taskInstanceBOList){
+            BusinessFormDTO businessFormDTO = businessFormService.selectById(taskInstanceBO.getBfId());
+            taskInstanceBO.setBfUrl(businessFormDTO.getFormUrl());
         }
-        return wfTaskInstanceBOList;
+        return taskInstanceBOList;
     }
 
     public void sendScheduleRequest(TaskInstanceMessage taskInstanceMessage) {

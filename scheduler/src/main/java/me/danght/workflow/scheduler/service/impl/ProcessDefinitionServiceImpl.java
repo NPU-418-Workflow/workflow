@@ -50,7 +50,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     BpmnModelCacheDao bpmnModelCacheDao;
 
     @Override
-    public ProcessDefinitionBO getWfProcessDefinitionById(String id) {
+    public ProcessDefinitionBO getProcessDefinitionById(String id) {
         ProcessDefinitionDO processDefinitionDO = processDefinitionRepository.findById(id).orElse(null);
         if (processDefinitionDO == null) return null;
         ProcessDefinitionBO processDefinitionBO = ProcessDefinitionConvert.INSTANCE.convertDOToBO(processDefinitionDO);

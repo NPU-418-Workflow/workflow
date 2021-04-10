@@ -45,7 +45,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     TaskHistoryInstanceRepository taskHistoryInstanceRepository;
 
     @Inject
-    ActivityInstanceRepository wfActivityInstanceRepository;
+    ActivityInstanceRepository activityInstanceRepository;
 
     @Inject
     ProcessInstanceRepository processInstanceRepository;
@@ -94,11 +94,11 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     public List<TaskInstanceDTO> findRelatedTaskList(String aiId) {
         List<TaskInstanceDO> taskInstanceDOList = taskInstanceRepository
                 .findAllByTiStatusAndAiId(TaskInstanceState.TASK_INSTANCE_STATE_COMPLETED, aiId);
-        List<TaskInstanceDTO> wfTaskInstanceDTOList = new ArrayList<>();
+        List<TaskInstanceDTO> taskInstanceDTOList = new ArrayList<>();
         for(TaskInstanceDO taskInstanceDO : taskInstanceDOList){
-            wfTaskInstanceDTOList.add(TaskInstanceConvert.INSTANCE.convertDOToDTO(taskInstanceDO));
+            taskInstanceDTOList.add(TaskInstanceConvert.INSTANCE.convertDOToDTO(taskInstanceDO));
         }
-        return wfTaskInstanceDTOList;
+        return taskInstanceDTOList;
     }
 
     @Override
@@ -172,7 +172,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         List<TaskInstanceBO> taskInstanceBOList = new ArrayList<>();
         for(TaskInstanceDO taskInstanceDO : taskInstanceDOList){
             TaskInstanceBO taskInstanceBO = TaskInstanceConvert.INSTANCE.convertDOToBO(taskInstanceDO);
-            ActivityInstanceDO activityInstanceDO = wfActivityInstanceRepository.findById(taskInstanceBO.getAiId()).orElse(null);
+            ActivityInstanceDO activityInstanceDO = activityInstanceRepository.findById(taskInstanceBO.getAiId()).orElse(null);
             if (activityInstanceDO == null) return null;
             ProcessInstanceDO processInstanceDO = processInstanceRepository.findById(activityInstanceDO.getPiId()).orElse(null);
             if (processInstanceDO == null) return null;
@@ -188,13 +188,13 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                 .findAllByTiAssignerAndTiAssignerType(tiAssigner, "1");
         List<TaskInstanceBO> taskInstanceBOList = new ArrayList<>();
         for(TaskInstanceDO taskInstanceDO : taskInstanceDOList){
-            TaskInstanceBO wfTaskInstanceBO = TaskInstanceConvert.INSTANCE.convertDOToBO(taskInstanceDO);
-            ActivityInstanceDO activityInstanceDO = wfActivityInstanceRepository.findById(wfTaskInstanceBO.getAiId()).orElse(null);
+            TaskInstanceBO taskInstanceBO = TaskInstanceConvert.INSTANCE.convertDOToBO(taskInstanceDO);
+            ActivityInstanceDO activityInstanceDO = activityInstanceRepository.findById(taskInstanceBO.getAiId()).orElse(null);
             if (activityInstanceDO == null) return null;
             ProcessInstanceDO processInstanceDO = processInstanceRepository.findById(activityInstanceDO.getPiId()).orElse(null);
             if (processInstanceDO == null) return null;
-            wfTaskInstanceBO.setPiBusinessKey(processInstanceDO.getPiBusinessKey());
-            taskInstanceBOList.add(wfTaskInstanceBO);
+            taskInstanceBO.setPiBusinessKey(processInstanceDO.getPiBusinessKey());
+            taskInstanceBOList.add(taskInstanceBO);
         }
         return taskInstanceBOList;
     }

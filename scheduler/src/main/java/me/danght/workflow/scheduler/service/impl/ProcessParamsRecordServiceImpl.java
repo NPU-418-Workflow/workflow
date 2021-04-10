@@ -90,9 +90,9 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
                                 processParamsRecordDO.getAiId(),
                                 ProcessParamState.PROCESS_PARAM_EFFECT,
                                 ProcessParamRecordLevel.PROCESS_PARAM_RECORD_LEVEL_ACTIVITY);
-                for(ProcessParamsRecordDO wfProcessParamsRecordPreDO : processParamsRecordDOPreList){
-                    wfProcessParamsRecordPreDO.setStatus(ProcessParamState.PROCESS_PARAM_FAILURE);
-                    processParamsRecordRepository.save(wfProcessParamsRecordPreDO);
+                for(ProcessParamsRecordDO paramsRecordDO : processParamsRecordDOPreList){
+                    paramsRecordDO.setStatus(ProcessParamState.PROCESS_PARAM_FAILURE);
+                    processParamsRecordRepository.save(paramsRecordDO);
                 }
                 processParamsRecordDO.setId(null);
                 processParamsRecordDO.setTiId(null);

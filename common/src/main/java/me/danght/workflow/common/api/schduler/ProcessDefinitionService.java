@@ -6,7 +6,7 @@ import me.danght.workflow.common.dto.ProcessTemplateDTO;
 import java.util.List;
 
 public interface ProcessDefinitionService {
-    ProcessDefinitionBO getWfProcessDefinitionById(String id);
+    ProcessDefinitionBO getProcessDefinitionById(String id);
     ProcessDefinitionBO generatePDFromTemplateFile(ProcessTemplateDTO wfProcessTemplateDTO);
     List<ProcessDefinitionBO> queryDefinitionList();
 }

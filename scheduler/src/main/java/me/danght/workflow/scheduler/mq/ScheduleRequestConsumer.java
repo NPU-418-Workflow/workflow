@@ -105,7 +105,7 @@ public class ScheduleRequestConsumer {
                             )
                     );
             ProcessDefinitionBO processDefinitionBO = processDefinitionService
-                    .getWfProcessDefinitionById(
+                    .getProcessDefinitionById(
                             processInstanceBO.getPdId()
                     );
             BpmnModel bpmnModel = bpmnModelCacheDao.get(processDefinitionBO.getId());
@@ -135,10 +135,10 @@ public class ScheduleRequestConsumer {
                 pushTask(activityInstanceBO, processInstanceDO.getPiStarter());
             }
             //自动完成第一个任务
-            TaskInstanceMessage wfTaskInstanceMessage = new TaskInstanceMessage()
+            TaskInstanceMessage taskInstanceMessage = new TaskInstanceMessage()
                     .setId(taskInstanceService.getFirstTaskId(processInstanceBO.getId()))
                     .setRequiredData(scheduleRequestMessage.getProcessInstanceMessage().getRequiredData());
-            scheduleRequestMessage.setTaskInstanceMessage(wfTaskInstanceMessage);
+            scheduleRequestMessage.setTaskInstanceMessage(taskInstanceMessage);
             taskSchedule(scheduleRequestMessage);
         }else if(scheduleRequestMessage.getTaskInstanceMessage() != null) {
             //幂等性保证
@@ -165,7 +165,7 @@ public class ScheduleRequestConsumer {
         taskHistoryInstanceService.save(TaskHistoryInstanceConvert.INSTANCE.convertBOToDTO(taskHistoryInstanceBO));
         //从运行表中清除当前记录
         taskInstanceService.delete(taskInstanceBO.getId());
-        //根据接收到的WfTaskInstanceMessage判断接下来的流转情况
+        //根据接收到的TaskInstanceMessage判断接下来的流转情况
         //记录任务带的流程参数数据(任务级)
         ActivityInstanceBO activityInstanceBO = activityInstanceService.getById(taskInstanceBO.getAiId());
         processParamsRecordService.recordRequiredData(
@@ -185,7 +185,7 @@ public class ScheduleRequestConsumer {
         //活动历史库打时间戳记录
         scheduleManageService.recordActivityHistory(activityInstanceDTO);
         //之后开始找接下来的活动，返回值为空代表当前还有关联活动未完成，返回值为endevent说明要结束流程
-        ProcessDefinitionBO processDefinitionBO = processDefinitionService.getWfProcessDefinitionById(activityInstanceBO.getPdId());
+        ProcessDefinitionBO processDefinitionBO = processDefinitionService.getProcessDefinitionById(activityInstanceBO.getPdId());
         BpmnModel bpmnModel = bpmnModelCacheDao.get(processDefinitionBO.getId());
         if (bpmnModel == null) {
             bpmnModel = BpmnXMLConvertUtil.ConvertToBpmnModel(processDefinitionBO.getPtContent());

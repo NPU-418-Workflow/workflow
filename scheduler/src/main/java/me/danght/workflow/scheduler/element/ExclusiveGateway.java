@@ -83,7 +83,7 @@ public class ExclusiveGateway extends Gateway implements Serializable {
                         }
                     }
                 }
-                if(JexlUtil.conditionIsMacth(sequenceFlow.getConditionExpression(),requiredData)){
+                if(JexlUtil.conditionIsMatch(sequenceFlow.getConditionExpression(),requiredData)){
                     token.setCurrentNode(null);
                     token.setElementNo(no);
                     ((Node)sequenceFlow.getTo()).enter(token,

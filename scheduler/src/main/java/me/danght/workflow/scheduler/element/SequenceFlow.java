@@ -100,7 +100,7 @@ public class SequenceFlow extends BaseElement implements Serializable {
                     }
                 }
             }
-            if(JexlUtil.conditionIsMacth(conditionExpression,requiredData)){
+            if(JexlUtil.conditionIsMatch(conditionExpression,requiredData)){
                 token.setCurrentNode(null);
                 token.setElementNo(no);
                 ((Node)to).enter(token, processParamsRecordService, tokenRepository, taskInstanceRepository, activityInstanceService, processInstanceService, redisClient);

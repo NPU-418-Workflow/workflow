@@ -10,7 +10,7 @@ import java.util.Map;
 public class JexlUtil {
 
 
-    public static Boolean conditionIsMacth(String conditionExpression, Map<String, Object> requiredData){
+    public static Boolean conditionIsMatch(String conditionExpression, Map<String, Object> requiredData){
         if(conditionExpression == null || conditionExpression.length() == 0)
             conditionExpression = "true";
         JexlContext jc = new MapContext();
@@ -20,7 +20,6 @@ public class JexlUtil {
         String expressionStr="answer = " + conditionExpression;
         Expression expression = new JexlEngine().createExpression(expressionStr);
         expression.evaluate(jc);
-        Boolean isMatch = Boolean.valueOf(jc.get("answer").toString());
-        return isMatch;
+        return Boolean.valueOf(jc.get("answer").toString());
     }
 }

@@ -33,10 +33,8 @@ public class BpmnXMLConvertUtil {
             Iterator<Element> iterator = root.elementIterator();
             while (iterator.hasNext()){
                 Element currentElement = iterator.next();
-                switch (currentElement.getName()){
-                    case BpmnXMLConstants.ELEMENT_PROCESS:
-                        bpmnModel.setProcess(ConvertToProcess(currentElement));
-                        break;
+                if (BpmnXMLConstants.ELEMENT_PROCESS.equals(currentElement.getName())) {
+                    bpmnModel.setProcess(ConvertToProcess(currentElement));
                 }
             }
             //提取BpmnModel级别的属性
@@ -48,6 +46,8 @@ public class BpmnXMLConvertUtil {
                         break;
                     case BpmnXMLConstants.ATTRIBUTE_NAME:
                         bpmnModel.setName(attribute.getValue());
+                        break;
+                    default:
                         break;
                 }
             }
@@ -101,6 +101,8 @@ public class BpmnXMLConvertUtil {
                 case BpmnXMLConstants.ATTRIBUTE_NAME:
                     process.setName(attribute.getValue());
                     break;
+                default:
+                    break;
             }
         }
 
@@ -118,7 +120,7 @@ public class BpmnXMLConvertUtil {
                     process.getGatewayList().add(ConvertToExclusiveGateway(currentElement));
                     break;
                 case BpmnXMLConstants.ELEMENT_GATEWAY_PARALLEL:
-                    process.getGatewayList().add(ConvertToparallelGateway(currentElement));
+                    process.getGatewayList().add(ConvertToParallelGateway(currentElement));
                     break;
                 case BpmnXMLConstants.ELEMENT_EVENT_START:
                     process.setStartEvent(ConvertToStartEvent(currentElement));
@@ -126,6 +128,8 @@ public class BpmnXMLConvertUtil {
                     break;
                 case BpmnXMLConstants.ELEMENT_EVENT_END:
                     process.getEventList().add(ConvertToEndEvent(currentElement));
+                    break;
+                default:
                     break;
             }
         }
@@ -181,6 +185,8 @@ public class BpmnXMLConvertUtil {
                         dataParamList.add(dataParam);
                     }
                     userTask.setParamList(dataParamList);
+                default:
+                    break;
             }
         }
         return userTask;
@@ -208,16 +214,16 @@ public class BpmnXMLConvertUtil {
                 case BpmnXMLConstants.ATTRIBUTE_SEQUENCE_FLOW_TARGET_REF:
                     sequenceFlow.setTargetRef(attribute.getValue());
                     break;
+                default:
+                    break;
             }
         }
         //遍历element节点的所有子节点
         Iterator<Element> iterator = element.elementIterator();
         while (iterator.hasNext()){
             Element currentElement = iterator.next();
-            switch (currentElement.getName()){
-                case BpmnXMLConstants.ATTRIBUTE_SEQUENCE_FLOW_CONDITION:
-                    ConvertToConditionExpression(currentElement,sequenceFlow);
-                    break;
+            if (BpmnXMLConstants.ATTRIBUTE_SEQUENCE_FLOW_CONDITION.equals(currentElement.getName())) {
+                ConvertToConditionExpression(currentElement, sequenceFlow);
             }
         }
         return sequenceFlow;
@@ -227,20 +233,19 @@ public class BpmnXMLConvertUtil {
         sequenceFlow.setConditionExpression(currentElement.getText());
         List<Attribute> attributeList = currentElement.attributes();
         for(Attribute attribute : attributeList){
-            switch (attribute.getName()){
-                case BpmnXMLConstants.ATTRIBUTE_SEQUENCE_FLOW_PARAM_LIST:
-                    String content = attribute.getValue();
-                    String[] params = content.split(";");
-                    List<DataParam> dataParamList = new ArrayList<>();
-                    for(String paramData : params){
-                        String[] attrs = paramData.split(",");
-                        DataParam dataParam = new DataParam().setTaskNo(attrs[0])
-                                .setPpName(attrs[1])
-                                .setPpType(attrs[2])
-                                .setEnginePpName(attrs[3]);
-                        dataParamList.add(dataParam);
-                    }
-                    sequenceFlow.setParamList(dataParamList);
+            if (BpmnXMLConstants.ATTRIBUTE_SEQUENCE_FLOW_PARAM_LIST.equals(attribute.getName())) {
+                String content = attribute.getValue();
+                String[] params = content.split(";");
+                List<DataParam> dataParamList = new ArrayList<>();
+                for (String paramData : params) {
+                    String[] attrs = paramData.split(",");
+                    DataParam dataParam = new DataParam().setTaskNo(attrs[0])
+                            .setPpName(attrs[1])
+                            .setPpType(attrs[2])
+                            .setEnginePpName(attrs[3]);
+                    dataParamList.add(dataParam);
+                }
+                sequenceFlow.setParamList(dataParamList);
             }
         }
         return currentElement.getText();
@@ -262,6 +267,8 @@ public class BpmnXMLConvertUtil {
                 case BpmnXMLConstants.ATTRIBUTE_NAME:
                     exclusiveGateway.setName(attribute.getValue());
                     break;
+                default:
+                    break;
             }
         }
         return exclusiveGateway;
@@ -272,7 +279,7 @@ public class BpmnXMLConvertUtil {
      * @param element
      * @return
      */
-    private static ParallelGateway ConvertToparallelGateway(Element element){
+    private static ParallelGateway ConvertToParallelGateway(Element element){
         ParallelGateway parallelGateway = new ParallelGateway();
         List<Attribute> attributeList = element.attributes();
         for(Attribute attribute : attributeList){
@@ -285,6 +292,8 @@ public class BpmnXMLConvertUtil {
                     break;
 /*                case BpmnXMLConstants.ATTRIBUTE_GATEWAY_RELATEDGATEWAY:
                     parallelGateway.setRelatedGateWay(attribute.getValue());*/
+                default:
+                    break;
             }
         }
         return parallelGateway;
@@ -322,6 +331,8 @@ public class BpmnXMLConvertUtil {
                         dataParamList.add(dataParam);
                     }
                     startEvent.setParamList(dataParamList);
+                default:
+                    break;
             }
         }
         return startEvent;
@@ -342,6 +353,8 @@ public class BpmnXMLConvertUtil {
                     break;
                 case BpmnXMLConstants.ATTRIBUTE_NAME:
                     endEvent.setName(attribute.getValue());
+                    break;
+                default:
                     break;
             }
         }

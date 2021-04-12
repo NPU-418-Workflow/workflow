@@ -11,6 +11,11 @@ import me.danght.workflow.app.service.LeaveInfoService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+/**
+ * 请假信息接口实现类
+ * @author wenxiang
+ * @author DangHT
+ */
 @Singleton
 public class LeaveInfoServiceImpl implements LeaveInfoService {
 
@@ -28,7 +33,7 @@ public class LeaveInfoServiceImpl implements LeaveInfoService {
     }
 
     @Override
-    public LeaveInfoDTO selectById(String id) {
+    public LeaveInfoDTO getLeaveInfoById(String id) {
         LeaveInfoDO leaveInfoDO = leaveInfoRepository.findById(id).orElse(null);
         if (leaveInfoDO == null) return null;
         LeaveInfoDTO leaveInfoDTO = LeaveInfoConvert.INSTANCE.convertDOToDTO(leaveInfoDO);

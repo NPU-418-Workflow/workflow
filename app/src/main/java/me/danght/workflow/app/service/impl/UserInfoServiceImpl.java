@@ -8,7 +8,13 @@ import me.danght.workflow.app.service.UserInfoService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
+/**
+ * 用户信息服务接口实现类
+ * @author wenxiang
+ * @author DangHT
+ */
 @Singleton
 public class UserInfoServiceImpl implements UserInfoService {
 
@@ -22,8 +28,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public UserInfoDTO queryUser(String id) {
+    public UserInfoDTO getUserById(String id) {
         UserInfoDO userInfoDO = userInfoRepository.findById(id).orElse(null);
         return UserInfoConvert.INSTANCE.convertDOToDTO(userInfoDO);
+    }
+
+    @Override
+    public Iterable<UserInfoDO> getAllUsers() {
+        return userInfoRepository.findAll();
     }
 }

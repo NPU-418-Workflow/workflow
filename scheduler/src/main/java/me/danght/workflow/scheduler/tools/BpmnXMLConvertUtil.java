@@ -185,6 +185,7 @@ public class BpmnXMLConvertUtil {
                         dataParamList.add(dataParam);
                     }
                     userTask.setParamList(dataParamList);
+                    break;
                 default:
                     break;
             }

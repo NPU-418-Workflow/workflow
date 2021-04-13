@@ -8,7 +8,6 @@ import me.danght.workflow.app.service.UserInfoService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 
 /**
  * 用户信息服务接口实现类

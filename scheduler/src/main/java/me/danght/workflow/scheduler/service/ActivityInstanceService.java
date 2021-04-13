@@ -6,7 +6,6 @@ import me.danght.workflow.scheduler.element.BaseElement;
 import me.danght.workflow.scheduler.element.StartEvent;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ActivityInstanceService {
     ActivityInstanceBO getById(String id);

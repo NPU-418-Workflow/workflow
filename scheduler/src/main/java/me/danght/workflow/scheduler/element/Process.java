@@ -23,13 +23,6 @@ import java.util.List;
 public class Process extends BaseElement implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public Process() {
-        userTaskList = new ArrayList<>();
-        sequenceFlowList = new ArrayList<>();
-        gatewayList = new ArrayList<>();
-        eventList = new ArrayList<>();
-    }
-
     /**
      * 流程名称
      */
@@ -56,4 +49,11 @@ public class Process extends BaseElement implements Serializable {
     protected List<Gateway> gatewayList;
 
     protected StartEvent startEvent;
+
+    public Process() {
+        userTaskList = new ArrayList<>();
+        sequenceFlowList = new ArrayList<>();
+        gatewayList = new ArrayList<>();
+        eventList = new ArrayList<>();
+    }
 }

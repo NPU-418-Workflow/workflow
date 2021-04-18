@@ -13,6 +13,7 @@ import me.danght.workflow.scheduler.dataobject.Token;
 import me.danght.workflow.scheduler.service.ActivityInstanceService;
 import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 import me.danght.workflow.scheduler.tools.JexlUtil;
+import org.jboss.logging.Logger;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -32,6 +33,8 @@ import java.util.Map;
 public class ExclusiveGateway extends Gateway implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOGGER = Logger.getLogger(ExclusiveGateway.class);
+
     @Override
     public void execute(Token token,
                         ProcessParamsRecordService processParamsRecordService,
@@ -40,6 +43,7 @@ public class ExclusiveGateway extends Gateway implements Serializable {
                         ActivityInstanceService activityInstanceService,
                         ProcessInstanceService processInstanceService,
                         RedisClient redisClient){
+        LOGGER.info("进入排他网关， 当前流程id=" + token.getPiId());
         /*TODO 这款先暂时还是遍历sf，找第一个符合条件的转移路线，后续想改成在ExclusiveGateway加一个表达式属性，然后直接返回转移sf的no
         这样ExclusiveGateway相连的sf就可以不写判断表达式，减少判断次数，也能比较好的控制排他性*/
         for(SequenceFlow sequenceFlow : outgoingFlows){
@@ -83,7 +87,13 @@ public class ExclusiveGateway extends Gateway implements Serializable {
                         }
                     }
                 }
-                if(JexlUtil.conditionIsMatch(sequenceFlow.getConditionExpression(),requiredData)){
+                LOGGER.info("判断当前条件" + sequenceFlow.conditionExpression + "是否满足");
+                for (Map.Entry<String, Object> stringObjectEntry : requiredData.entrySet()) {
+                    LOGGER.info("requiredData 内容：key=" + stringObjectEntry.getKey() + ", value=" + stringObjectEntry.getValue());
+                }
+                Boolean match = JexlUtil.conditionIsMatch(sequenceFlow.getConditionExpression(), requiredData);
+                LOGGER.info("当前条件" + sequenceFlow.conditionExpression + "判断结果为: " + match);
+                if(match){
                     token.setCurrentNode(null);
                     token.setElementNo(no);
                     ((Node)sequenceFlow.getTo()).enter(token,

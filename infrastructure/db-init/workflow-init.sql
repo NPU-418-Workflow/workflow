@@ -402,9 +402,9 @@ CREATE TABLE `process_params_relation`  (
 -- Records of process_params_relation
 -- ----------------------------
 INSERT INTO `process_params_relation` VALUES ('1217633984518225921', 'dynamicassignee01', '02', '02', '1217633983259922433', 'ut001', 'E004', '2020-01-16 10:25:39', '2020-01-16 10:25:39', 'businessdynamicassignee01');
-INSERT INTO `process_params_relation` VALUES ('1217633985277394945', 'judge', '02', '01', '1217633983259922433', 'ut003', 'E001', '2020-01-16 10:25:39', '2020-01-16 10:25:39', 'businessjudge');
-INSERT INTO `process_params_relation` VALUES ('1217633985466138625', 'pass', '02', '03', '1217633983259922433', 'ut004', 'E002', '2020-01-16 10:25:39', '2020-01-16 10:25:39', 'businessjudge');
-INSERT INTO `process_params_relation` VALUES ('1217633985487110145', 'ok', '02', '01', '1217633983259922433', 'ut007', 'E003', '2020-01-16 10:25:39', '2020-01-16 10:25:39', 'businessjudge');
+INSERT INTO `process_params_relation` VALUES ('1217633985277394945', 'judge', '02', '01', '1217633983259922433', 'ut003', 'E001', '2020-01-16 10:25:39', '2020-01-16 10:25:39', 'businessJudge');
+INSERT INTO `process_params_relation` VALUES ('1217633985466138625', 'pass', '02', '03', '1217633983259922433', 'ut004', 'E002', '2020-01-16 10:25:39', '2020-01-16 10:25:39', 'businessJudge');
+INSERT INTO `process_params_relation` VALUES ('1217633985487110145', 'ok', '02', '01', '1217633983259922433', 'ut007', 'E003', '2020-01-16 10:25:39', '2020-01-16 10:25:39', 'businessJudge');
 INSERT INTO `process_params_relation` VALUES ('1217633985503887361', 'durations', '02', '03', '1217633983259922433', 'startevent1', 'S001', '2020-01-16 10:25:39', '2020-01-16 10:25:39', 'durations');
 
 -- ----------------------------

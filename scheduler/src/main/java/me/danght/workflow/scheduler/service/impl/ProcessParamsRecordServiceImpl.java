@@ -69,7 +69,15 @@ public class ProcessParamsRecordServiceImpl implements ProcessParamsRecordServic
                 processParamsRecordRepository.save(processParamsRecordDO);
             }else{
                 processParamsRecordDO.setPpRecordValue(val);
-                processParamsRecordRepository.save(processParamsRecordDO);
+                int addVal = Integer.parseInt(processParamsRecordDO.getPpRecordValue());
+                if (addVal > 0) {
+                    ProcessParamsRecordDO ppr = processParamsRecordRepository.findById(processParamsRecordDO.getId()).orElse(null);
+                    if (ppr != null) {
+                        ppr.setPpRecordValue(String.valueOf(Integer.parseInt(ppr.getPpRecordValue()) + addVal));
+                        ppr.setUpdateTime(new Date());
+                        processParamsRecordRepository.save(ppr);
+                    }
+                }
             }
             //TODO 此处还应更新到缓存，由于返回值得问题暂时还没处理，另外还有并发下数据一致性的问题
         }

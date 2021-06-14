@@ -1,9 +1,9 @@
 package me.danght.workflow.scheduler.service.impl;
 
-import me.danght.workflow.common.dto.ProcessTemplateDTO;
 import me.danght.workflow.scheduler.convert.ProcessTemplateConvert;
 import me.danght.workflow.scheduler.dao.ProcessTemplateRepository;
 import me.danght.workflow.scheduler.dataobject.ProcessTemplateDO;
+import me.danght.workflow.scheduler.dto.ProcessTemplateDTO;
 import me.danght.workflow.scheduler.service.ProcessTemplateService;
 
 import javax.enterprise.context.ApplicationScoped;

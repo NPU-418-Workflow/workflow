@@ -1,23 +1,21 @@
 package me.danght.workflow.scheduler.service.impl;
 
-import me.danght.workflow.common.api.form.ProcessParamsRelationService;
-import me.danght.workflow.common.api.schduler.ProcessDefinitionService;
-import me.danght.workflow.common.bo.ProcessDefinitionBO;
-import me.danght.workflow.common.dto.ProcessParamsRelationDTO;
-import me.danght.workflow.common.dto.ProcessTemplateDTO;
+import me.danght.workflow.scheduler.bo.ProcessDefinitionBO;
 import me.danght.workflow.scheduler.convert.ProcessDefinitionConvert;
 import me.danght.workflow.scheduler.dao.ProcessDefinitionRepository;
 import me.danght.workflow.scheduler.dao.ProcessTemplateRepository;
 import me.danght.workflow.scheduler.dao.redis.BpmnModelCacheDao;
 import me.danght.workflow.scheduler.dataobject.ProcessDefinitionDO;
 import me.danght.workflow.scheduler.dataobject.ProcessTemplateDO;
+import me.danght.workflow.scheduler.dto.ProcessParamsRelationDTO;
+import me.danght.workflow.scheduler.dto.ProcessTemplateDTO;
 import me.danght.workflow.scheduler.element.BpmnModel;
 import me.danght.workflow.scheduler.element.DataParam;
 import me.danght.workflow.scheduler.element.StartEvent;
 import me.danght.workflow.scheduler.element.UserTask;
+import me.danght.workflow.scheduler.service.ProcessDefinitionService;
+import me.danght.workflow.scheduler.service.ProcessParamsRelationService;
 import me.danght.workflow.scheduler.tools.BpmnXMLConvertUtil;
-import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.control.ActivateRequestContext;
@@ -32,7 +30,6 @@ import java.util.List;
  * @author wenxiang
  * @author DangHT
  */
-@DubboService(interfaceClass = ProcessDefinitionService.class)
 @ApplicationScoped
 @ActivateRequestContext
 public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
@@ -43,7 +40,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     @Inject
     ProcessTemplateRepository processTemplateRepository;
 
-    @DubboReference
+    @Inject
     ProcessParamsRelationService processParamsRelationService;
 
     @Inject

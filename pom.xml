@@ -9,11 +9,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>extensions/quarkus-dubbo-rpc</module>
-    <module>common</module>
     <module>scheduler</module>
-    <module>form</module>
-    <module>app</module>
   </modules>
 
   <properties>

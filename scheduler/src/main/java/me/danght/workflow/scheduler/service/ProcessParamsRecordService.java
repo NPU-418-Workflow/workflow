@@ -1,8 +1,8 @@
 package me.danght.workflow.scheduler.service;
 
-import me.danght.workflow.common.dataobject.ParmObject;
-import me.danght.workflow.common.dto.ActivityInstanceDTO;
 import me.danght.workflow.scheduler.bo.ProcessParamsRecordBO;
+import me.danght.workflow.scheduler.dataobject.ParmObject;
+import me.danght.workflow.scheduler.dto.ActivityInstanceDTO;
 
 import java.util.Map;
 

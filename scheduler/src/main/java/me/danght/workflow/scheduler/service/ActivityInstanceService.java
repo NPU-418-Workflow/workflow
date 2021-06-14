@@ -1,7 +1,7 @@
 package me.danght.workflow.scheduler.service;
 
-import me.danght.workflow.common.bo.ActivityInstanceBO;
-import me.danght.workflow.common.dto.ActivityInstanceDTO;
+import me.danght.workflow.scheduler.bo.ActivityInstanceBO;
+import me.danght.workflow.scheduler.dto.ActivityInstanceDTO;
 import me.danght.workflow.scheduler.element.BaseElement;
 import me.danght.workflow.scheduler.element.StartEvent;
 

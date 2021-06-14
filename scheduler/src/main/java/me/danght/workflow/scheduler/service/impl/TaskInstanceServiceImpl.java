@@ -1,13 +1,8 @@
 package me.danght.workflow.scheduler.service.impl;
 
 import io.quarkus.redis.client.RedisClient;
-import me.danght.workflow.common.api.schduler.TaskInstanceService;
-import me.danght.workflow.common.bo.TaskInstanceBO;
-import me.danght.workflow.common.constant.TaskInstanceState;
-import me.danght.workflow.common.dto.TaskInstanceDTO;
-import me.danght.workflow.common.dto.TaskInstanceQueryDTO;
-import me.danght.workflow.common.msg.ScheduleRequestMessage;
-import me.danght.workflow.common.msg.TaskInstanceMessage;
+import me.danght.workflow.scheduler.bo.TaskInstanceBO;
+import me.danght.workflow.scheduler.constant.TaskInstanceState;
 import me.danght.workflow.scheduler.convert.TaskInstanceConvert;
 import me.danght.workflow.scheduler.dao.ActivityInstanceRepository;
 import me.danght.workflow.scheduler.dao.ProcessInstanceRepository;
@@ -17,7 +12,11 @@ import me.danght.workflow.scheduler.dataobject.ActivityInstanceDO;
 import me.danght.workflow.scheduler.dataobject.ProcessInstanceDO;
 import me.danght.workflow.scheduler.dataobject.TaskHistoryInstanceDO;
 import me.danght.workflow.scheduler.dataobject.TaskInstanceDO;
-import org.apache.dubbo.config.annotation.DubboService;
+import me.danght.workflow.scheduler.dto.TaskInstanceDTO;
+import me.danght.workflow.scheduler.dto.TaskInstanceQueryDTO;
+import me.danght.workflow.scheduler.msg.ScheduleRequestMessage;
+import me.danght.workflow.scheduler.msg.TaskInstanceMessage;
+import me.danght.workflow.scheduler.service.TaskInstanceService;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
@@ -33,7 +32,6 @@ import java.util.*;
  * @author wenxiang
  * @author DangHT
  */
-@DubboService(interfaceClass = TaskInstanceService.class)
 @ApplicationScoped
 @ActivateRequestContext
 public class TaskInstanceServiceImpl implements TaskInstanceService {

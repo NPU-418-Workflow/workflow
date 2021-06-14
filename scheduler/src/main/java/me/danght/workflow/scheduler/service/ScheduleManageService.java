@@ -1,6 +1,6 @@
 package me.danght.workflow.scheduler.service;
 
-import me.danght.workflow.common.dto.ActivityInstanceDTO;
+import me.danght.workflow.scheduler.dto.ActivityInstanceDTO;
 import me.danght.workflow.scheduler.element.UserTask;
 import me.danght.workflow.scheduler.element.Process;
 

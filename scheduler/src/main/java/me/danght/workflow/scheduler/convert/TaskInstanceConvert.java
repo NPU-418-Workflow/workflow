@@ -1,11 +1,11 @@
 package me.danght.workflow.scheduler.convert;
 
-import me.danght.workflow.common.bo.TaskHistoryInstanceBO;
-import me.danght.workflow.common.bo.TaskInstanceBO;
-import me.danght.workflow.common.dto.TaskInstanceDTO;
-import me.danght.workflow.common.msg.TaskInstanceMessage;
+import me.danght.workflow.scheduler.bo.TaskHistoryInstanceBO;
+import me.danght.workflow.scheduler.bo.TaskInstanceBO;
 import me.danght.workflow.scheduler.dataobject.TaskHistoryInstanceDO;
 import me.danght.workflow.scheduler.dataobject.TaskInstanceDO;
+import me.danght.workflow.scheduler.dto.TaskInstanceDTO;
+import me.danght.workflow.scheduler.msg.TaskInstanceMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

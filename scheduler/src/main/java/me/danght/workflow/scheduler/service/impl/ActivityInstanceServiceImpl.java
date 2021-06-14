@@ -1,21 +1,19 @@
 package me.danght.workflow.scheduler.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import me.danght.workflow.common.bo.ActivityInstanceBO;
-import me.danght.workflow.common.constant.ActivityInstanceState;
-import me.danght.workflow.common.dto.ActivityInstanceDTO;
+import me.danght.workflow.scheduler.bo.ActivityInstanceBO;
 import me.danght.workflow.scheduler.bo.ProcessParamsRecordBO;
+import me.danght.workflow.scheduler.constant.ActivityInstanceState;
 import me.danght.workflow.scheduler.convert.ActivityInstanceConvert;
 import me.danght.workflow.scheduler.dao.ActivityHistoryInstanceRepository;
 import me.danght.workflow.scheduler.dao.ActivityInstanceRepository;
 import me.danght.workflow.scheduler.dao.ProcessParamsRecordRepository;
 import me.danght.workflow.scheduler.dataobject.ActivityInstanceDO;
+import me.danght.workflow.scheduler.dto.ActivityInstanceDTO;
 import me.danght.workflow.scheduler.element.BaseElement;
 import me.danght.workflow.scheduler.element.StartEvent;
 import me.danght.workflow.scheduler.element.UserTask;
 import me.danght.workflow.scheduler.service.ActivityInstanceService;
 import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
-import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.control.ActivateRequestContext;
@@ -29,7 +27,6 @@ import java.util.*;
  * @author DangHT
  * @since 2019-10-09
  */
-@DubboService(interfaceClass = ActivityInstanceService.class)
 @ApplicationScoped
 @ActivateRequestContext
 public class ActivityInstanceServiceImpl implements ActivityInstanceService {
@@ -90,7 +87,7 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
             //即席内容处理结束
             if(activityInstanceDOList.size() > 0){
                 activityInstanceDO = activityInstanceDOList.get(0);
-                activityInstanceDO.setAiAssignerId(JSON.toJSONString(assList));
+                activityInstanceDO.setAiAssignerId(assList.toString());
                 activityInstanceDO.setActiveTiNum(assList.size());
                 activityInstanceDO.setAiStatus(ActivityInstanceState.TASK_ACTIVITY_STATE_RUNNING);
                 activityInstanceDO.setUpdateTime(new Date());
@@ -103,7 +100,7 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
                 activityInstanceDO = new ActivityInstanceDO()
                         .setAiName(userTask.getName())
                         .setAiStatus(ActivityInstanceState.TASK_ACTIVITY_STATE_RUNNING)
-                        .setAiAssignerId(JSON.toJSONString(assList))
+                        .setAiAssignerId(assList.toString())
                         .setAiAssignerType(userTask.getAssigneeType())
                         .setBfId(userTask.getPageKey())
                         .setUserTaskNo(userTask.getNo())
@@ -132,7 +129,7 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
         ActivityInstanceDO activityInstanceDO;
         if(activityInstanceDOList.size() > 0){
             activityInstanceDO = activityInstanceDOList.get(0);
-            activityInstanceDO.setAiAssignerId(JSON.toJSONString(piStarter));
+            activityInstanceDO.setAiAssignerId(piStarter);
             activityInstanceDO.setActiveTiNum(1);
             activityInstanceDO.setAiStatus(ActivityInstanceState.TASK_ACTIVITY_STATE_RUNNING);
             activityInstanceDO.setUpdateTime(new Date());
@@ -143,7 +140,7 @@ public class ActivityInstanceServiceImpl implements ActivityInstanceService {
             activityInstanceDO = new ActivityInstanceDO()
                     .setAiName(startEvent.getName())
                     .setAiStatus(ActivityInstanceState.TASK_ACTIVITY_STATE_RUNNING)
-                    .setAiAssignerId(JSON.toJSONString(piStarter))
+                    .setAiAssignerId(piStarter)
                     .setAiAssignerType("0")
                     .setUserTaskNo(startEvent.getNo())
                     .setAiCategory("01")

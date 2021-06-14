@@ -2,8 +2,8 @@ package me.danght.workflow.scheduler.dao.redis;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.quarkus.redis.client.RedisClient;
-import me.danght.workflow.common.serialization.BaseMapper;
 import me.danght.workflow.scheduler.element.BpmnModel;
+import me.danght.workflow.scheduler.serialization.BaseMapper;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

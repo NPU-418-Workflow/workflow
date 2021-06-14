@@ -4,11 +4,11 @@ import io.quarkus.redis.client.RedisClient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import me.danght.workflow.common.api.schduler.ProcessInstanceService;
 import me.danght.workflow.scheduler.dao.TaskInstanceRepository;
 import me.danght.workflow.scheduler.dao.TokenRepository;
 import me.danght.workflow.scheduler.dataobject.Token;
 import me.danght.workflow.scheduler.service.ActivityInstanceService;
+import me.danght.workflow.scheduler.service.ProcessInstanceService;
 import me.danght.workflow.scheduler.service.ProcessParamsRecordService;
 
 import java.util.ArrayList;

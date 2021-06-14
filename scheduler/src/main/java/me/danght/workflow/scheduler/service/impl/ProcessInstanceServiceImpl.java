@@ -1,17 +1,16 @@
 package me.danght.workflow.scheduler.service.impl;
 
-import me.danght.workflow.common.api.schduler.ProcessInstanceService;
-import me.danght.workflow.common.bo.ProcessInstanceBO;
-import me.danght.workflow.common.constant.ProcessInstanceState;
-import me.danght.workflow.common.dto.ProcessInstanceStartDTO;
-import me.danght.workflow.common.msg.ProcessInstanceMessage;
-import me.danght.workflow.common.msg.ScheduleRequestMessage;
+import me.danght.workflow.scheduler.bo.ProcessInstanceBO;
+import me.danght.workflow.scheduler.constant.ProcessInstanceState;
 import me.danght.workflow.scheduler.convert.ProcessInstanceConvert;
 import me.danght.workflow.scheduler.dao.ProcessHistoryInstanceRepository;
 import me.danght.workflow.scheduler.dao.ProcessInstanceRepository;
 import me.danght.workflow.scheduler.dataobject.ProcessHistoryInstanceDO;
 import me.danght.workflow.scheduler.dataobject.ProcessInstanceDO;
-import org.apache.dubbo.config.annotation.DubboService;
+import me.danght.workflow.scheduler.dto.ProcessInstanceStartDTO;
+import me.danght.workflow.scheduler.msg.ProcessInstanceMessage;
+import me.danght.workflow.scheduler.msg.ScheduleRequestMessage;
+import me.danght.workflow.scheduler.service.ProcessInstanceService;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
@@ -30,7 +29,6 @@ import java.util.List;
  * @author DangHT
  * @since 2019-10-08
  */
-@DubboService(interfaceClass = ProcessInstanceService.class)
 @ApplicationScoped
 @ActivateRequestContext
 public class ProcessInstanceServiceImpl implements ProcessInstanceService {

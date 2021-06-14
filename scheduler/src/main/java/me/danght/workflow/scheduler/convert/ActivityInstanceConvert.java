@@ -1,9 +1,9 @@
 package me.danght.workflow.scheduler.convert;
 
-import me.danght.workflow.common.bo.ActivityInstanceBO;
-import me.danght.workflow.common.dto.ActivityInstanceDTO;
+import me.danght.workflow.scheduler.bo.ActivityInstanceBO;
 import me.danght.workflow.scheduler.dataobject.ActivityHistoryInstanceDO;
 import me.danght.workflow.scheduler.dataobject.ActivityInstanceDO;
+import me.danght.workflow.scheduler.dto.ActivityInstanceDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

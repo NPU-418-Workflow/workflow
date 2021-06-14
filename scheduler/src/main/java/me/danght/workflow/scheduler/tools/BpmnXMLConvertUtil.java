@@ -1,6 +1,6 @@
 package me.danght.workflow.scheduler.tools;
 
-import me.danght.workflow.common.constant.BpmnXMLConstants;
+import me.danght.workflow.scheduler.constant.BpmnXMLConstants;
 import me.danght.workflow.scheduler.element.*;
 import me.danght.workflow.scheduler.element.Process;
 import org.dom4j.*;

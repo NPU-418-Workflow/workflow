@@ -18,3 +18,15 @@ mvn clean package -Pnative
 # 注意先启动 docker compose 环境组件
 .\target\scheduler-1.0.0-SNAPSHOT-runner.exe
 ```
+
+`docker-comopse` 方式启动
+```bash
+# 在项目根目录下
+mvn clean package
+
+docker build -f scheduler/src/main/docker/Dockerfile.jvm -t quarkus/scheduler-jvm .
+
+docker-compose -f infrastructure/docker-compose.yaml up -d
+
+# 启动完成后访问localhost:8080
+```

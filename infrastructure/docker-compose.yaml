@@ -45,3 +45,14 @@ services:
         container_name: "redis"
         ports:
             - "6379:6379"
+
+    workflow:
+        image: quarkus/scheduler-jvm
+        container_name: "workflow"
+        restart: on-failure
+        ports:
+            - "8080:8080"
+        depends_on:
+            - database
+            - kafka
+            - redis

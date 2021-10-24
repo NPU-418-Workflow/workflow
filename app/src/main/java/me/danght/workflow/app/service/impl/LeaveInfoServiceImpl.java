@@ -1,5 +1,6 @@
 package me.danght.workflow.app.service.impl;
 
+import com.google.common.annotations.VisibleForTesting;
 import me.danght.workflow.app.convert.LeaveInfoConvert;
 import me.danght.workflow.app.dao.LeaveInfoRepository;
 import me.danght.workflow.app.dao.UserInfoRepository;
@@ -8,15 +9,15 @@ import me.danght.workflow.app.dataobject.UserInfoDO;
 import me.danght.workflow.app.dto.LeaveInfoDTO;
 import me.danght.workflow.app.service.LeaveInfoService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * 请假信息接口实现类
  * @author wenxiang
  * @author DangHT
  */
-@Singleton
+@ApplicationScoped
 public class LeaveInfoServiceImpl implements LeaveInfoService {
 
     @Inject
@@ -41,5 +42,15 @@ public class LeaveInfoServiceImpl implements LeaveInfoService {
         if (userInfoDO == null) return null;
         leaveInfoDTO.setUiName(userInfoDO.getUiName());
         return leaveInfoDTO;
+    }
+
+    @VisibleForTesting
+    public void setLeaveInfoRepository(LeaveInfoRepository leaveInfoRepository) {
+        this.leaveInfoRepository = leaveInfoRepository;
+    }
+
+    @VisibleForTesting
+    public void setUserInfoRepository(UserInfoRepository userInfoRepository) {
+        this.userInfoRepository = userInfoRepository;
     }
 }

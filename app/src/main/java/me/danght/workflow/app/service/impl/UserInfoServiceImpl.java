@@ -1,20 +1,21 @@
 package me.danght.workflow.app.service.impl;
 
+import com.google.common.annotations.VisibleForTesting;
 import me.danght.workflow.app.convert.UserInfoConvert;
 import me.danght.workflow.app.dao.UserInfoRepository;
 import me.danght.workflow.app.dataobject.UserInfoDO;
 import me.danght.workflow.app.dto.UserInfoDTO;
 import me.danght.workflow.app.service.UserInfoService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * 用户信息服务接口实现类
  * @author wenxiang
  * @author DangHT
  */
-@Singleton
+@ApplicationScoped
 public class UserInfoServiceImpl implements UserInfoService {
 
     @Inject
@@ -35,5 +36,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public Iterable<UserInfoDO> getAllUsers() {
         return userInfoRepository.findAll();
+    }
+
+    @VisibleForTesting
+    public void setUserInfoRepository(UserInfoRepository userInfoRepository) {
+        this.userInfoRepository = userInfoRepository;
     }
 }

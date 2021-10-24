@@ -34,11 +34,6 @@
       <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
     </dependency>
     <dependency>
-      <groupId>me.danght.workflow</groupId>
-      <artifactId>common</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${org.projectlombok.version}</version>
@@ -104,7 +99,6 @@
         <configuration>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
         </configuration>
       </plugin>
@@ -133,7 +127,6 @@
                   <systemPropertyVariables>
                     <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                     <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                    <maven.home>${maven.home}</maven.home>
                   </systemPropertyVariables>
                 </configuration>
               </execution>

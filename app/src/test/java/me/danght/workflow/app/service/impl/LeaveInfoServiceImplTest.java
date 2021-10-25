@@ -65,7 +65,7 @@ public class LeaveInfoServiceImplTest {
             public LeaveInfoDTO answer(InvocationOnMock invocationOnMock) throws Throwable {
                 LeaveInfoDO leaveInfoDO = invocationOnMock.getArgument(0);
                 leaveInfoDOS.add(leaveInfoDO);
-                return LeaveInfoConvert.INSTANCE.convertDOToDTO(leaveInfoDO);
+                return null;
             }
         });
         Mockito.when(leaveInfoRepository.findById(Mockito.anyString())).thenAnswer(new Answer<Optional<LeaveInfoDO>>() {
